@@ -1,23 +1,36 @@
-package domain;
+package com.ecommerce.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Getter
 @Setter
+@Entity(name= "sell_products")
 public class SellProduct {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     private Double sellingPrice;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "sellproduct_id")
     private List<SellerCustomization> baseCustomizationOptions;
 
     public SellProduct(Product product, Double sellingPrice) {
         this.baseCustomizationOptions = new ArrayList<>();
         this.product = product;
         this.sellingPrice = sellingPrice;
+    }
+
+    public SellProduct() {
+
     }
 
     public void addPersonalization(SellerCustomization... baseCustomization){
