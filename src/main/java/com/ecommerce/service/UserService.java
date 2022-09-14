@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.mapper.UserMapper;
@@ -22,8 +23,13 @@ public class UserService {
 
     //TODO ENCRIPTAR CONTRASEÑA
 
+
     public User findById(Long characterId) throws NotFound {
         return userRepository.findById(characterId).orElseThrow(() -> new NotFound("User not found"));
+    }
+
+    public ShowUserDTO findByIdShowUser(Long id) throws NotFound {
+        return userMapper.usertoShowDTO(userRepository.findById(id).orElseThrow(() -> new NotFound("User not found")));
     }
 
     public List<User> findAll() {
@@ -32,6 +38,10 @@ public class UserService {
 
     public User findByName(String name) {
         return userRepository.findByName(name).orElseThrow(RuntimeException::new);
+    }
+
+    public ShowUserDTO findByNameShowUser(String name) {
+        return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(RuntimeException::new));
     }
 
     public UserDTO save(UserDTO user) {

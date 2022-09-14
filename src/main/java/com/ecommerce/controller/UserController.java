@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.model.User;
@@ -17,28 +18,36 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
+
+    @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) throws NotFound {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
+    @GetMapping("/minimal/{id}")
+    public ResponseEntity<ShowUserDTO> findByIdShowUser(@PathVariable Long id) throws NotFound {
+        return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.OK);
+    }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<User>> getAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
-
-
+    @GetMapping("/name/{name}")
+    public ResponseEntity<ShowUserDTO> findByName(@PathVariable String name) {
+        return new ResponseEntity<>(userService.findByNameShowUser(name), HttpStatus.OK);
+    }
+    /*
     @GetMapping("/name/{name}")
     public ResponseEntity<User> getUserbyUsername(@PathVariable("name") String name) {
         return new ResponseEntity<>(userService.findByName(name), HttpStatus.OK);
     }
-
-    @PostMapping
+    */
+    @PostMapping()
     public ResponseEntity<UserDTO> save(@RequestBody UserDTO user) {
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         if (userService.deleteUser(id)){
             return new ResponseEntity<>("User DELETED", HttpStatus.OK);
@@ -46,7 +55,7 @@ public class UserController {
             return new ResponseEntity<>("User NOT FOUND", HttpStatus.BAD_REQUEST);
         }
     }
-   @PatchMapping ("/{id}")
+   @PatchMapping ("{id}")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws NotFound {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.ecommerce.mapper;
 
+import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 
 import com.ecommerce.model.User;
@@ -10,6 +11,14 @@ import java.util.Optional;
 
 @Component
 public class UserMapper {
+
+    public ShowUserDTO usertoShowDTO(User user) {
+        ShowUserDTO showUserDTO = new ShowUserDTO();
+        showUserDTO.setName(user.getName());
+        showUserDTO.setRole_id(user.getRole());
+        return showUserDTO;
+    }
+
 
     public UserDTO usertoDTO(User user){
         UserDTO userDTO = new UserDTO();
