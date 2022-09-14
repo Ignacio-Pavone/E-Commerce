@@ -7,7 +7,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Seller {
-    private User user;
+    private User user; // user rol seller
     private List<SellProduct> sellProducts;
 
     public Seller(User user, List<SellProduct> sellProducts) {

@@ -24,7 +24,7 @@ public class Role {
     private RoleType role;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = Permission.class)
+    @ElementCollection(targetClass = Permission.class )
     @CollectionTable(
             name = "permisos",
             joinColumns=@JoinColumn(name = "role_id", referencedColumnName = "role_id")

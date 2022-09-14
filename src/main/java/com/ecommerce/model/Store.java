@@ -14,7 +14,7 @@ public class Store {
     private Long idStore; // 5
     @OneToOne
     @JoinColumn(name="user_id")
-    private User user; // Nacho
+    private User user; // seller
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Publication> publications; // Gorra, Zapatos, Pantalones
     @Column(name = "modos_de_pago")

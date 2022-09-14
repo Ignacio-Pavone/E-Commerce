@@ -1,11 +1,7 @@
 package com.ecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 
 
 import javax.persistence.*;
@@ -16,28 +12,21 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
 @Table(name = "usuarios")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String password;
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id",nullable = true,insertable=false, updatable=false)
     @ManyToOne(targetEntity= com.ecommerce.model.Role.class)
     private Role role;
 
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
+    @JsonProperty("role_id")
+    @JsonIgnoreProperties("role_id")
+    @JsonBackReference
+    private Long role_id;
     @Override
     public String toString() {
         return "User{" +
