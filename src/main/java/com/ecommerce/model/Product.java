@@ -16,7 +16,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String mangerName;
     private String name;
     private Double basePrice;
     private String description;
@@ -25,8 +24,7 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<BaseCustomization> baseCustomizationOptions;
 
-    public Product(String name, String mangerName, Double basePrice, String description, String manufacturingTime) {
-        this.mangerName = mangerName;
+    public Product(String name, Double basePrice, String description, String manufacturingTime) {
         this.name = name;
         this.basePrice = basePrice;
         this.description = description;
@@ -47,7 +45,7 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", mangerName='" + mangerName + '\'' +
+
                 ", productName='" + name + '\'' +
                 ", basePrice=" + basePrice +
                 '}';

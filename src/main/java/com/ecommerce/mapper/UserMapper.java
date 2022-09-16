@@ -1,13 +1,8 @@
 package com.ecommerce.mapper;
-
 import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
-
 import com.ecommerce.model.User;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-
 
 @Component
 public class UserMapper {
