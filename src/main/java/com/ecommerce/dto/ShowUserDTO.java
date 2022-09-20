@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Data
 public class ShowUserDTO {
+    private Long id;
     private String name;
     @JsonProperty("role_id")
     private Role role_id;

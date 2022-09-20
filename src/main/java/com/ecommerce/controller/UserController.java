@@ -24,17 +24,12 @@ public class UserController {
     private SellerService sellerService;
 
     @GetMapping("{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) throws NotFound {
-        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/minimal/{id}")
-    public ResponseEntity<ShowUserDTO> findByIdShowUser(@PathVariable Long id) throws NotFound {
+    public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws NotFound {
         return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<ShowUserDTO>> getAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
@@ -43,12 +38,6 @@ public class UserController {
         return new ResponseEntity<>(userService.findByNameShowUser(name), HttpStatus.OK);
     }
 
-    /*
-    @GetMapping("/name/{name}")
-    public ResponseEntity<User> getUserbyUsername(@PathVariable("name") String name) {
-        return new ResponseEntity<>(userService.findByName(name), HttpStatus.OK);
-    }
-    */
     @PostMapping()
     public ResponseEntity<UserDTO> save(@RequestBody UserDTO user) {
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);

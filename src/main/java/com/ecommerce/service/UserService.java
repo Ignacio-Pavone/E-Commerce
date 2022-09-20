@@ -1,16 +1,19 @@
 package com.ecommerce.service;
 
 import com.ecommerce.dto.ShowUserDTO;
+import com.ecommerce.dto.StoreDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.Seller;
+import com.ecommerce.model.Store;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.SellerRepository;
 import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +37,13 @@ public class UserService {
         return userMapper.usertoShowDTO(userRepository.findById(id).orElseThrow(() -> new NotFound("User not found")));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<ShowUserDTO> findAll() {
+        List<User>users  = userRepository.findAll();
+        List<ShowUserDTO> showUserDTOS = new ArrayList<>();
+        for (User user : users) {
+            showUserDTOS.add(userMapper.usertoShowDTO(user));
+        }
+        return showUserDTOS;
     }
 
     public User findByName(String name) {

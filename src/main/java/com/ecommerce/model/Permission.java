@@ -10,4 +10,5 @@ public enum Permission {
     add_publication,
     edit_publication,
     delete_publication
+    
 }

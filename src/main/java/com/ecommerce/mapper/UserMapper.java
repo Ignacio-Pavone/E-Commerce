@@ -9,6 +9,7 @@ public class UserMapper {
 
     public ShowUserDTO usertoShowDTO(User user) {
         ShowUserDTO showUserDTO = new ShowUserDTO();
+        showUserDTO.setId(user.getId());
         showUserDTO.setName(user.getName());
         showUserDTO.setRole_id(user.getRole());
         return showUserDTO;

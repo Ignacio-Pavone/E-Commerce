@@ -1,12 +1,13 @@
 package com.ecommerce.service;
 
+import com.ecommerce.Converters.PaymentConverter;
 import com.ecommerce.dto.StoreDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.mapper.StoreMapper;
+import com.ecommerce.model.PaymentMethod;
 import com.ecommerce.model.Seller;
 import com.ecommerce.model.Store;
 import com.ecommerce.repository.StoreRepository;
-import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,16 @@ public class StoreService {
             }
         }
         return storeRepository.save(store);
-
     }
-
     public Store deleteStore (Long id) throws NotFound {
         Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
         storeRepository.delete(store);
         return store;
     }
 
+    public Store addPaymentMethod (Long id, PaymentMethod paymentMethod) throws NotFound {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
+        store.getPaymentMethods().add(paymentMethod);
+        return storeRepository.save(store);
+    }
 }
