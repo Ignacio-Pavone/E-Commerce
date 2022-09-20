@@ -13,8 +13,6 @@ public class UserMapper {
         showUserDTO.setRole_id(user.getRole());
         return showUserDTO;
     }
-
-
     public UserDTO usertoDTO(User user){
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());

@@ -1,5 +1,7 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,16 +18,14 @@ import java.util.List;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idStore; // 5
+    private Long idStore;
     @OneToOne
-    @JoinColumn(name="seller_id")
-    private Seller user; // seller
+    @JoinColumn(name = "seller_id")
+    private Seller user;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Publication> publications; // Gorra, Zapatos, Pantalones
+    private List<Publication> publications;
     @Column(name = "modos_de_pago")
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = PaymentMethod.class)
+    @ElementCollection(targetClass = PaymentMethod.class, fetch = FetchType.EAGER)
     private List<PaymentMethod> paymentMethods;
-
-    
 }

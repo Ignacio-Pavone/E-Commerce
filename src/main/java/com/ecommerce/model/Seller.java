@@ -19,7 +19,7 @@ import java.util.List;
 public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long seller_id;
     @JoinColumn(name = "user_id", referencedColumnName = "id",insertable=false, updatable=false)
     @ManyToOne
     private User user;

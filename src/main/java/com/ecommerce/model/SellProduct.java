@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,10 +22,9 @@ public class SellProduct {
     private Double sellingPrice;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sellproduct_id")
-    private List<SellerCustomization> baseCustomizationOptions;
-
+    private List<SellerCustomization> sellerCustomizations;
     public SellProduct(Product product, Double sellingPrice) {
-        this.baseCustomizationOptions = new ArrayList<>();
+        this.sellerCustomizations = new ArrayList<>();
         this.product = product;
         this.sellingPrice = sellingPrice;
     }
@@ -34,7 +34,7 @@ public class SellProduct {
     }
 
     public void addPersonalization(SellerCustomization... baseCustomization){
-        Collections.addAll(baseCustomizationOptions, baseCustomization);
+        Collections.addAll(sellerCustomizations, baseCustomization);
     }
 
     public void setSellingPrice(Double basePrice,List<SellerCustomization> customizations) {
@@ -45,12 +45,5 @@ public class SellProduct {
         this.sellingPrice = acumulator + basePrice;
     }
 
-    @Override
-    public String toString() {
-        return "SellProduct{" +
-                "product=" + product +
-                ", sellingPrice=" + sellingPrice +
-                ", baseCustomizationOptions=" + baseCustomizationOptions +
-                '}';
-    }
+
 }

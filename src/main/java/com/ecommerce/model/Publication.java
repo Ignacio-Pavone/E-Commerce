@@ -14,7 +14,7 @@ public class Publication {
     private Long id;
     private String publicationName;
     @OneToOne
-    @JoinColumn(name="id_product")
+    @JoinColumn(name="id_sellproduct")
     private SellProduct sellProduct; // gorra
     private String stock;
     private Double price;

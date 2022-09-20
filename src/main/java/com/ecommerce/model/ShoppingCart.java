@@ -12,9 +12,8 @@ import java.util.List;
 public class ShoppingCart {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long sellCode;
-   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-   @JoinColumn(name = "shopping_cart_id")
+   private Long id_shopping_cart;
+   @ManyToMany(cascade = CascadeType.ALL)
    private List<SellProduct> productList;
    private Integer totalProducts;
    private Double totalPrice;
