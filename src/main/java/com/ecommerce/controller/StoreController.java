@@ -1,10 +1,9 @@
 package com.ecommerce.controller;
 
 
-import com.ecommerce.Converters.PaymentConverter;
+import com.ecommerce.converters.PaymentConverter;
 import com.ecommerce.dto.StoreDTO;
 import com.ecommerce.exception.NotFound;
-import com.ecommerce.model.PaymentMethod;
 import com.ecommerce.model.Store;
 import com.ecommerce.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,11 @@ public class StoreController {
         return new ResponseEntity<>(storeService.findall(), HttpStatus.OK);
     }
 
+    @GetMapping("/{name}")
+    public ResponseEntity<StoreDTO> getStoreByName(@PathVariable String name) throws NotFound {
+        return new ResponseEntity<>(storeService.findByName(name), HttpStatus.OK);
+    }
+
     @PostMapping("/create/{id}")
     public ResponseEntity<Store> createStore(@PathVariable("id") Long id) throws NotFound {
         return new ResponseEntity<>(storeService.createStore(id), HttpStatus.CREATED);
@@ -38,6 +42,6 @@ public class StoreController {
     @PostMapping("/addpayment/{id}")
     public ResponseEntity<Store> addPayment(@PathVariable("id") Long id, @RequestBody String payment) throws NotFound {
         PaymentConverter paymentConverter = new PaymentConverter();
-        return new ResponseEntity<>(storeService.addPaymentMethod(id, paymentConverter.convertToEntityAttribute(payment)), HttpStatus.OK);
+        return new ResponseEntity<>(storeService.addPaymentMethod(id, paymentConverter.convertToEntityAttribute(payment.toLowerCase())), HttpStatus.OK);
     }
 }

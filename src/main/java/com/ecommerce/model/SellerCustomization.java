@@ -23,9 +23,7 @@ public class SellerCustomization {
         this.price = price;
         this.description = description;
     }
-
     public SellerCustomization() {
-
     }
 
     @Override

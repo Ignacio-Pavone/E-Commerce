@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.dto.ShowSellerDTO;
 import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.NotFound;
@@ -51,15 +52,14 @@ public class UserController {
             return new ResponseEntity<>("User NOT FOUND", HttpStatus.BAD_REQUEST);
         }
     }
-
     @PatchMapping("/setrole/{id}")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws NotFound {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
     }
 
     @GetMapping("/seller/{id}")
-    public ResponseEntity<Seller> getSeller(@PathVariable("id") Long id) throws NotFound {
-        return new ResponseEntity<>(sellerService.findSellerById(id), HttpStatus.OK);
+    public ResponseEntity<ShowSellerDTO> getSeller(@PathVariable("id") Long id) throws NotFound {
+        return new ResponseEntity<>(sellerService.findSellerByIdDTO(id), HttpStatus.OK);
     }
 
     @PostMapping("/seller")

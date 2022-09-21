@@ -1,10 +1,11 @@
-package com.ecommerce.Converters;
+package com.ecommerce.converters;
 
+import com.ecommerce.exception.NotFound;
 import com.ecommerce.model.PaymentMethod;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.lang.annotation.Annotation;
+
 @Converter(autoApply = true)
 public class PaymentConverter implements AttributeConverter<PaymentMethod,String> {
     @Override
@@ -21,7 +22,7 @@ public class PaymentConverter implements AttributeConverter<PaymentMethod,String
                 payment = "debit_card";
                 break;
               default:
-                throw new IllegalArgumentException("Unknown Payment" + paymentMethod);
+                throw new IllegalArgumentException("Unknown Payment " + paymentMethod);
          }
          return payment;
     }
@@ -32,7 +33,6 @@ public class PaymentConverter implements AttributeConverter<PaymentMethod,String
         if (s == null) {
             return null;
         }
-        System.out.println(s);
         PaymentMethod paymentMethod;
         switch (s) {
             case "cash": paymentMethod = PaymentMethod.CASH;
@@ -42,7 +42,7 @@ public class PaymentConverter implements AttributeConverter<PaymentMethod,String
             case "debit_card": paymentMethod = PaymentMethod.DEBIT_CARD;
                 break;
             default:
-                return null;
+                throw new IllegalArgumentException("Unknown Payment " + s);
         }
         return paymentMethod;
     }

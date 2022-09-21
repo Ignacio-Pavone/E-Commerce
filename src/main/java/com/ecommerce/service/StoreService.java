@@ -1,6 +1,5 @@
 package com.ecommerce.service;
 
-import com.ecommerce.Converters.PaymentConverter;
 import com.ecommerce.dto.StoreDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.mapper.StoreMapper;
@@ -10,7 +9,6 @@ import com.ecommerce.model.Store;
 import com.ecommerce.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +33,7 @@ public class StoreService {
     public StoreDTO findByName(String name) throws NotFound {
         return storeMapper.storeToDTO(storeRepository.findStoreByUser_User_Name(name));
     }
+
     public Store createStore (Long id) throws NotFound {
         Store store = new Store();
         Seller seller = sellerService.findSellerById(id);
@@ -46,6 +45,8 @@ public class StoreService {
         }
         return storeRepository.save(store);
     }
+
+
     public Store deleteStore (Long id) throws NotFound {
         Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
         storeRepository.delete(store);
@@ -54,6 +55,11 @@ public class StoreService {
 
     public Store addPaymentMethod (Long id, PaymentMethod paymentMethod) throws NotFound {
         Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
+        for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
+            if (paymentMethod1.equals(paymentMethod)) {
+                throw new NotFound("Payment method already exists");
+            }
+        }
         store.getPaymentMethods().add(paymentMethod);
         return storeRepository.save(store);
     }
