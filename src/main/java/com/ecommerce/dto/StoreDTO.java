@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Data
 public class StoreDTO {
     private Long idStore;
     private Long seller_id;

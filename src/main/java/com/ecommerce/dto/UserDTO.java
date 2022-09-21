@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@Data
 public class UserDTO{
     @JsonProperty("id")
     private Long id;

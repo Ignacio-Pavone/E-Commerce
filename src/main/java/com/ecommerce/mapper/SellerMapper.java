@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 public class SellerMapper {
     @Autowired
     private UserMapper userMapper;
-
     public ShowSellerDTO toShowSellerDTO(Seller seller) {
         ShowSellerDTO showSellerDTO = new ShowSellerDTO();
         showSellerDTO.setSeller_id(seller.getSeller_id());

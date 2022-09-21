@@ -1,6 +1,8 @@
 package com.ecommerce.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name= "sell_products")
 public class SellProduct {
     @Id
@@ -21,15 +25,6 @@ public class SellProduct {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sellproduct_id")
     private List<SellerCustomization> sellerCustomizations;
-    public SellProduct(Product product, Double sellingPrice) {
-        this.sellerCustomizations = new ArrayList<>();
-        this.product = product;
-        this.sellingPrice = sellingPrice;
-    }
-
-    public SellProduct() {
-
-    }
 
     public void addPersonalization(SellerCustomization... baseCustomization){
         Collections.addAll(sellerCustomizations, baseCustomization);

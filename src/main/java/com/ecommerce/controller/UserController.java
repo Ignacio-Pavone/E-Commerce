@@ -5,7 +5,6 @@ import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.NotFound;
 import com.ecommerce.model.Seller;
-import com.ecommerce.model.User;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

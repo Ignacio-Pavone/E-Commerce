@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Data
 public class ShowUserDTO {
     private Long id;
     private String name;
