@@ -12,7 +12,8 @@ public class SellerMapper {
     public ShowSellerDTO toShowSellerDTO(Seller seller) {
         ShowSellerDTO showSellerDTO = new ShowSellerDTO();
         showSellerDTO.setSeller_id(seller.getSeller_id());
-        showSellerDTO.setUser(userMapper.usertoShowDTO(seller.getUser()));
+        showSellerDTO.setUsername(seller.getUser().getName());
+        showSellerDTO.setRole(seller.getUser().getRole().getRole().name());
         showSellerDTO.setSellProducts(seller.getSellProducts());
         return showSellerDTO;
     }

@@ -1,7 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.dto.StoreDTO;
-import com.ecommerce.exception.NotFound;
+import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.StoreMapper;
 import com.ecommerce.model.PaymentMethod;
 import com.ecommerce.model.Seller;
@@ -30,37 +30,48 @@ public class StoreService {
     return storeDTOS;
     }
 
-    public StoreDTO findByName(String name) throws NotFound {
+    public StoreDTO findByName(String name) throws Error {
         return storeMapper.storeToDTO(storeRepository.findStoreByUser_User_Name(name));
     }
 
-    public Store createStore (Long id) throws NotFound {
+    public Store createStore (Long id) throws Error {
         Store store = new Store();
         Seller seller = sellerService.findSellerById(id);
         store.setUser(seller);
         for (StoreDTO stor1 : findall()) {
             if (stor1.getSeller_id().equals(seller.getSeller_id())) {
-                throw new NotFound("Store already exists");
+                throw new Error("Store already exists");
             }
         }
         return storeRepository.save(store);
     }
 
 
-    public Store deleteStore (Long id) throws NotFound {
-        Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
+    public Store deleteStore (Long id) throws Error {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         storeRepository.delete(store);
         return store;
     }
 
-    public Store addPaymentMethod (Long id, PaymentMethod paymentMethod) throws NotFound {
-        Store store = storeRepository.findById(id).orElseThrow(() -> new NotFound("Store not found"));
+    public Store addPaymentMethod (Long id, PaymentMethod paymentMethod) throws Error {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
             if (paymentMethod1.equals(paymentMethod)) {
-                throw new NotFound("Payment method already exists");
+                throw new Error("Payment method already exists");
             }
         }
         store.getPaymentMethods().add(paymentMethod);
         return storeRepository.save(store);
+    }
+
+    public Store removePaymentMethod (Long id, PaymentMethod paymentMethod) throws Error {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
+        for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
+            if (paymentMethod1.equals(paymentMethod)) {
+                store.getPaymentMethods().remove(paymentMethod);
+                return storeRepository.save(store);
+            }
+        }
+        throw new Error("Payment method not found");
     }
 }

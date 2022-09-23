@@ -3,7 +3,7 @@ package com.ecommerce.controller;
 import com.ecommerce.dto.ShowSellerDTO;
 import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
-import com.ecommerce.exception.NotFound;
+import com.ecommerce.exception.Error;
 import com.ecommerce.model.Seller;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.service.UserService;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -24,8 +25,8 @@ public class UserController {
     private SellerService sellerService;
 
     @GetMapping("{id}")
-    public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws NotFound {
-        return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.OK);
+    public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws Error {
+        return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.FOUND);
     }
 
     @GetMapping()
@@ -34,12 +35,12 @@ public class UserController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<ShowUserDTO> findByName(@PathVariable String name) {
-        return new ResponseEntity<>(userService.findByNameShowUser(name), HttpStatus.OK);
+    public ResponseEntity<ShowUserDTO> findByName(@PathVariable String name) throws Error {
+        return new ResponseEntity<>(userService.findByNameShowUser(name), HttpStatus.FOUND);
     }
 
     @PostMapping()
-    public ResponseEntity<UserDTO> save(@RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO user) throws Error {
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
@@ -48,17 +49,17 @@ public class UserController {
         if (userService.deleteUser(id)) {
             return new ResponseEntity<>("User DELETED", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("User NOT FOUND", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
     @PatchMapping("/setrole/{id}")
-    public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws NotFound {
-        return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
+    public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
+        return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/seller/{id}")
-    public ResponseEntity<ShowSellerDTO> getSeller(@PathVariable("id") Long id) throws NotFound {
-        return new ResponseEntity<>(sellerService.findSellerByIdDTO(id), HttpStatus.OK);
+    public ResponseEntity<ShowSellerDTO> getSeller(@PathVariable("id") Long id) throws Error {
+        return new ResponseEntity<>(sellerService.findSellerByIdDTO(id), HttpStatus.FOUND);
     }
 
     @PostMapping("/seller")
@@ -70,6 +71,7 @@ public class UserController {
     public ResponseEntity<List<Seller>> getAllsellers() {
         return new ResponseEntity<>(sellerService.findAll(), HttpStatus.OK);
     }
+
 }
 
 

@@ -1,5 +1,6 @@
 package com.ecommerce.dto;
 
+import com.ecommerce.model.Role;
 import com.ecommerce.model.SellProduct;
 import lombok.Data;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 public class ShowSellerDTO {
     private Long seller_id;
-    private ShowUserDTO user;
+    private String username;
+    private String role;
     private List<SellProduct> sellProducts;
 }

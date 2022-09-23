@@ -1,5 +1,7 @@
 package com.ecommerce.repository;
 
+import com.ecommerce.model.Product;
+import com.ecommerce.model.SellProduct;
 import com.ecommerce.model.Seller;
 import com.ecommerce.model.User;
 import org.springframework.data.domain.Example;
@@ -13,5 +15,6 @@ import java.util.Optional;
 public interface SellerRepository extends JpaRepository<Seller, Long> {
         Optional<Seller> findById(Long id);
         List<Seller> findAll();
+
 }
 

@@ -1,7 +1,8 @@
 package com.ecommerce.service;
+
 import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
-import com.ecommerce.exception.NotFound;
+import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
@@ -20,20 +21,19 @@ public class UserService {
     private UserMapper userMapper;
 
 
-
     //TODO ENCRIPTAR CONTRASEÑA
 
 
-    public User findById(Long characterId) throws NotFound {
-        return userRepository.findById(characterId).orElseThrow(() -> new NotFound("User not found"));
+    public User findById(Long characterId) throws Error {
+        return userRepository.findById(characterId).orElseThrow(() -> new Error("User not found"));
     }
 
-    public ShowUserDTO findByIdShowUser(Long id) throws NotFound {
-        return userMapper.usertoShowDTO(userRepository.findById(id).orElseThrow(() -> new NotFound("User not found")));
+    public ShowUserDTO findByIdShowUser(Long id) throws Error {
+        return userMapper.usertoShowDTO(userRepository.findById(id).orElseThrow(() -> new Error("User not found")));
     }
 
     public List<ShowUserDTO> findAll() {
-        List<User>users  = userRepository.findAll();
+        List<User> users = userRepository.findAll();
         List<ShowUserDTO> showUserDTOS = new ArrayList<>();
         for (User user : users) {
             showUserDTOS.add(userMapper.usertoShowDTO(user));
@@ -41,24 +41,21 @@ public class UserService {
         return showUserDTOS;
     }
 
-    public User findByName(String name) {
-        return userRepository.findByName(name).orElseThrow(RuntimeException::new);
+
+    public ShowUserDTO findByNameShowUser(String name) throws Error {
+        return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(() -> new Error("User not found")));
     }
 
-    public ShowUserDTO findByNameShowUser(String name) {
-        return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(RuntimeException::new));
-    }
-
-    public UserDTO save(UserDTO user) {
+    public UserDTO save(UserDTO user) throws Error {
         Optional<User> userOptional = userRepository.findByName(user.getName());
         if (userOptional.isPresent()) {
-
+            throw new Error("User already exists");
         }
         User nuevo = userRepository.save(userMapper.DTOtoUser(user));
         return userMapper.usertoDTO(nuevo);
     }
 
-    public UserDTO setRole(Long id, Long role_id) throws NotFound {
+    public UserDTO setRole(Long id, Long role_id) throws Error {
         User user = findById(id);
         user.setRole_id(role_id);
         return userMapper.usertoDTO(userRepository.save(user));

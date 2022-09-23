@@ -9,6 +9,6 @@ public enum Permission {
     delete_product,
     add_publication,
     edit_publication,
-    delete_publication
-    
+    delete_publication,
+    buy_product
 }

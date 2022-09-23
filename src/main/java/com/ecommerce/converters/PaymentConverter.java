@@ -1,6 +1,5 @@
 package com.ecommerce.converters;
 
-import com.ecommerce.exception.NotFound;
 import com.ecommerce.model.PaymentMethod;
 
 import javax.persistence.AttributeConverter;

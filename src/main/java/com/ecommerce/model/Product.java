@@ -33,13 +33,10 @@ public class Product {
     }
 
     public Product() {
-
     }
-
     public void addPersonalization(BaseCustomization... baseCustomization) {
         Collections.addAll(baseCustomizationOptions, baseCustomization);
     }
-
 
     @Override
     public String toString() {
