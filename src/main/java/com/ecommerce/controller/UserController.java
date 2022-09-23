@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @PostMapping("/seller")
-    public ResponseEntity<Seller> saveSeller(@RequestBody Seller seller) {
+    public ResponseEntity<Seller> saveSeller(@RequestBody Seller seller) throws Error {
         return new ResponseEntity<>(sellerService.saveSeller(seller), HttpStatus.CREATED);
     }
 

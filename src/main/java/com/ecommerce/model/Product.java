@@ -1,6 +1,11 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -12,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name="productos")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,29 +27,20 @@ public class Product {
     private Double basePrice;
     private String description;
     private String manufacturingTime;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "product_id")
-    private List<BaseCustomization> baseCustomizationOptions;
+    @JoinColumn(name = "custom_id", referencedColumnName = "id",nullable = true,insertable=false, updatable=false)
+    @ManyToOne(targetEntity= com.ecommerce.model.BaseCustomization.class)
+    private BaseCustomization baseCustomizationOptions;
 
-    public Product(String name, Double basePrice, String description, String manufacturingTime) {
-        this.name = name;
-        this.basePrice = basePrice;
-        this.description = description;
-        this.manufacturingTime = manufacturingTime;
-        baseCustomizationOptions = new ArrayList<>();
-    }
+    @JsonProperty("custom_id")
+    @JsonIgnoreProperties("custom_id")
+    @JsonBackReference
+    private Long custom_id;
 
-    public Product() {
-    }
-    public void addPersonalization(BaseCustomization... baseCustomization) {
-        Collections.addAll(baseCustomizationOptions, baseCustomization);
-    }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-
                 ", productName='" + name + '\'' +
                 ", basePrice=" + basePrice +
                 '}';
