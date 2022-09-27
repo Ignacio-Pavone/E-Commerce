@@ -1,9 +1,11 @@
 package com.ecommerce.controller;
 
 
+import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
+import com.ecommerce.model.SellProduct;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/products")
 @RestController
@@ -42,5 +43,11 @@ public class ProductController {
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/tosell")
+    public ResponseEntity<List<ShowSellProductDTO>> getProductsToSell() {
+        return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
+    }
+
 
 }

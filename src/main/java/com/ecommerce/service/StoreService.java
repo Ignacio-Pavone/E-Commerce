@@ -46,7 +46,6 @@ public class StoreService {
         return storeRepository.save(store);
     }
 
-
     public Store deleteStore (Long id) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         storeRepository.delete(store);

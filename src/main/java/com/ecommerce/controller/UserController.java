@@ -5,6 +5,7 @@ import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Seller;
+import com.ecommerce.model.User;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @RequestMapping("/users")
 @RestController
 public class UserController {
@@ -23,6 +23,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private SellerService sellerService;
+
 
     @GetMapping("{id}")
     public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws Error {
@@ -52,6 +53,7 @@ public class UserController {
             return new ResponseEntity<>("User NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
+
     @PatchMapping("/setrole/{id}")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);

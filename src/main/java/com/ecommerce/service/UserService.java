@@ -40,8 +40,6 @@ public class UserService {
         }
         return showUserDTOS;
     }
-
-
     public ShowUserDTO findByNameShowUser(String name) throws Error {
         return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(() -> new Error("User not found")));
     }
