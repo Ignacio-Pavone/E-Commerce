@@ -1,18 +1,16 @@
 package com.ecommerce.service;
 
 
+import com.ecommerce.dto.ProductFilterDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
-import com.ecommerce.dto.ShowUserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.SellProductMapper;
-import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
-import com.ecommerce.model.Seller;
-import com.ecommerce.model.User;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.SellProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -26,6 +24,9 @@ public class ProductService {
     private SellProductRepository sellProductRepository;
     @Autowired
     private SellProductMapper sellproductMapper;
+
+    @Autowired
+    private ProductFiltersService productFiltersService;
 
 
     public List<Product> findAll() {
@@ -65,6 +66,12 @@ public class ProductService {
             showSellsDTOS.add(sellproductMapper.sellProductToDTO(sellProduct));
         }
         return showSellsDTOS;
+    }
+
+    public List<ShowSellProductDTO> getByFilters(String title, String order) {
+        ProductFilterDTO productFilterDTO = new ProductFilterDTO(title, order);
+        List<Product> lista = productRepository.findAll(productFiltersService.getByFilters(productFilterDTO));
+        return sellproductMapper.sellproductEntityList2DTOList(lista);
     }
 
 }

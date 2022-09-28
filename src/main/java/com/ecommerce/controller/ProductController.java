@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 
+import com.ecommerce.dto.ProductFilterDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
@@ -48,6 +49,17 @@ public class ProductController {
     public ResponseEntity<List<ShowSellProductDTO>> getProductsToSell() {
         return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
     }
+
+    @GetMapping("/filters")
+    //filters?order=DESC/ASC&name=nombre
+    //filters?name=nombre
+    public ResponseEntity<List<ShowSellProductDTO>> getProductsByFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false, defaultValue = "ASC") String order) {
+        return new ResponseEntity<>(productService.getByFilters(name,order), HttpStatus.OK);
+    }
+
+
 
 
 }
