@@ -1,5 +1,8 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +21,14 @@ public class SellProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
     private Double sellingPrice;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sellproduct_id")
     private List<SellerCustomization> sellerCustomizations;
+
 
     public void addPersonalization(SellerCustomization... baseCustomization){
         Collections.addAll(sellerCustomizations, baseCustomization);

@@ -14,5 +14,5 @@ public class ShowSellerDTO {
     private Long seller_id;
     private String username;
     private String role;
-    private List<SellProduct> sellProducts;
+    private List<ShowSellProductDTO> sellProducts;
 }

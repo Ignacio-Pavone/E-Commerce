@@ -31,9 +31,29 @@ public class ProductController {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) throws Error {
+        return new ResponseEntity<>(productService.deleteProduct(id), HttpStatus.OK);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Product> findById(@PathVariable Long id) throws Error {
         return new ResponseEntity<>(productService.findProductById(id), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/allsell")
+    public ResponseEntity<List<ShowSellProductDTO>> getAllSell() {
+        return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/filters")
+    //filters?order=DESC/ASC&name=nombre
+    //filters?name=nombre
+    public ResponseEntity<List<ShowSellProductDTO>> getProductsByFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false, defaultValue = "ASC") String order) {
+        return new ResponseEntity<>(productService.getByFilters(name, order), HttpStatus.OK);
     }
 
     @PatchMapping("/setCustomization/{id_producto}")
@@ -44,22 +64,6 @@ public class ProductController {
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
     }
-
-    @GetMapping("/tosell")
-    public ResponseEntity<List<ShowSellProductDTO>> getProductsToSell() {
-        return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
-    }
-
-    @GetMapping("/filters")
-    //filters?order=DESC/ASC&name=nombre
-    //filters?name=nombre
-    public ResponseEntity<List<ShowSellProductDTO>> getProductsByFilters(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false, defaultValue = "ASC") String order) {
-        return new ResponseEntity<>(productService.getByFilters(name,order), HttpStatus.OK);
-    }
-
-
 
 
 }

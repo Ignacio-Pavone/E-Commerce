@@ -1,16 +1,12 @@
 package com.ecommerce.service;
-
 import com.ecommerce.dto.ProductFilterDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-
-
 @Component
 public class ProductFiltersService {
     public Specification<ShowSellProductDTO> getByFilters(ProductFilterDTO sellProduct) {

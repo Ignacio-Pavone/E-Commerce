@@ -2,6 +2,8 @@ package com.ecommerce.controller;
 
 
 import com.ecommerce.converters.PaymentConverter;
+import com.ecommerce.dto.PublicationDTO;
+import com.ecommerce.dto.SimpleStoreDTO;
 import com.ecommerce.dto.StoreDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Store;
@@ -24,9 +26,9 @@ public class StoreController {
         return new ResponseEntity<>(storeService.findall(), HttpStatus.OK);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<StoreDTO> getStoreByName(@PathVariable String name) throws Error {
-        return new ResponseEntity<>(storeService.findByName(name), HttpStatus.FOUND);
+    @GetMapping("/{id}")
+    public ResponseEntity<SimpleStoreDTO> getStorebyID(@PathVariable Long id) throws Error {
+        return new ResponseEntity<>(storeService.findbyId(id), HttpStatus.FOUND);
     }
 
     @PostMapping("/create/{id}")
@@ -49,5 +51,15 @@ public class StoreController {
     public ResponseEntity<Store> deletePayment(@PathVariable("id") Long id, @RequestBody String payment) throws Error {
         PaymentConverter paymentConverter = new PaymentConverter();
         return new ResponseEntity<>(storeService.removePaymentMethod(id, paymentConverter.convertToEntityAttribute(payment.toLowerCase())), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/addpublication/{idstore}")
+    public ResponseEntity<PublicationDTO> addPublication(@PathVariable("idstore") Long id, @RequestBody PublicationDTO publication) throws Error {
+        return new ResponseEntity<>(storeService.addPublication(id, publication), HttpStatus.CREATED);
+    }
+
+    @PostMapping ("/{idstore}/publications/{idpublication}/{state}")
+    public ResponseEntity<StoreDTO> updatePublication(@PathVariable("idstore") Long idstore, @PathVariable("idpublication") Long idpublication, @PathVariable("state") Boolean state) throws Error {
+        return new ResponseEntity<>(storeService.updatepublicationStatus(idstore, idpublication, state), HttpStatus.OK);
     }
 }

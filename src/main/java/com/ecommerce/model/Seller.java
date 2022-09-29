@@ -32,4 +32,9 @@ public class Seller {
     @JoinColumn(name = "seller_id")
     private List<SellProduct> sellProducts;
 
+
+    public void addSellProduct(SellProduct sellProduct) {
+        sellProducts.add(sellProduct);
+    }
+
 }

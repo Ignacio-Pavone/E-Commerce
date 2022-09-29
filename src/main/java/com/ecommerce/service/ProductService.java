@@ -1,6 +1,5 @@
 package com.ecommerce.service;
 
-
 import com.ecommerce.dto.ProductFilterDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
@@ -10,7 +9,6 @@ import com.ecommerce.model.SellProduct;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.SellProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,10 +22,8 @@ public class ProductService {
     private SellProductRepository sellProductRepository;
     @Autowired
     private SellProductMapper sellproductMapper;
-
     @Autowired
     private ProductFiltersService productFiltersService;
-
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -47,6 +43,12 @@ public class ProductService {
             throw new Error("Product already exists");
         }
         return productRepository.save(product);
+    }
+
+    public String deleteProduct(Long id) throws Error {
+        Product product = findProductById(id);
+        productRepository.delete(product);
+        return "Product deleted";
     }
 
     public boolean setCustomization(Long id_product, Long id_custom) throws Error {

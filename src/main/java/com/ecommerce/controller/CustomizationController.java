@@ -12,17 +12,17 @@ public class CustomizationController {
     @Autowired
     private CustomizationService customizationService;
 
-    @PostMapping
+    @PostMapping("/base")
     public ResponseEntity<BaseCustomization> createCustomization(@RequestBody BaseCustomization bCustomizationController) {
         return ResponseEntity.ok(customizationService.createCustomization(bCustomizationController));
     }
 
-    @GetMapping
+    @GetMapping("/base")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(customizationService.findAll());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/base/{id}")
     public ResponseEntity<?> deleteCustomization(@PathVariable Long id) {
         customizationService.deleteCustomization(id);
         return ResponseEntity.ok("Customization deleted");

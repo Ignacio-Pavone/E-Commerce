@@ -1,3 +1,4 @@
+
 package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -37,12 +38,4 @@ public class Product {
     private Long custom_id;
 
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", productName='" + name + '\'' +
-                ", basePrice=" + basePrice +
-                '}';
-    }
 }

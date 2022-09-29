@@ -1,11 +1,8 @@
 package com.ecommerce.controller;
 
-import com.ecommerce.dto.ShowSellerDTO;
-import com.ecommerce.dto.ShowUserDTO;
-import com.ecommerce.dto.UserDTO;
+import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Seller;
-import com.ecommerce.model.User;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +18,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private SellerService sellerService;
-
 
     @GetMapping("{id}")
     public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws Error {
@@ -35,9 +29,19 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<ShowUserDTO> findByName(@PathVariable String name) throws Error {
-        return new ResponseEntity<>(userService.findByNameShowUser(name), HttpStatus.FOUND);
+    //TODO: me devuelve 2 necesito lista
+    @GetMapping(params = "name")
+    public ResponseEntity<List<ShowUserDTO>> findCharacterByName (@RequestParam(value = "name", required = false) String name) throws Error {
+        if (name == null) {
+            return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(userService.findByNameShowUserList(name), HttpStatus.OK);
+        }
+    }
+
+    @PutMapping ("{id}")
+    public ResponseEntity<ShowUserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO user) throws Error {
+        return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -59,20 +63,6 @@ public class UserController {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/seller/{id}")
-    public ResponseEntity<ShowSellerDTO> getSeller(@PathVariable("id") Long id) throws Error {
-        return new ResponseEntity<>(sellerService.findSellerByIdDTO(id), HttpStatus.FOUND);
-    }
-
-    @PostMapping("/seller")
-    public ResponseEntity<Seller> saveSeller(@RequestBody Seller seller) throws Error {
-        return new ResponseEntity<>(sellerService.saveSeller(seller), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/seller")
-    public ResponseEntity<List<Seller>> getAllsellers() {
-        return new ResponseEntity<>(sellerService.findAll(), HttpStatus.OK);
-    }
 
 }
 

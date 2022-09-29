@@ -25,9 +25,20 @@ public class Store {
     @JoinColumn(name = "seller_id")
     private Seller user;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
     private List<Publication> publications;
     @Column(name = "modos_de_pago")
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = PaymentMethod.class, fetch = FetchType.EAGER)
     private List<PaymentMethod> paymentMethods;
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "idStore=" + idStore +
+                ", user=" + user +
+                ", publications=" + publications +
+                ", paymentMethods=" + paymentMethods +
+                '}';
+    }
 }

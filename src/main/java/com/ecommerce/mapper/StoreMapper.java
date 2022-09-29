@@ -5,24 +5,24 @@ import com.ecommerce.model.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class StoreMapper {
+
+    @Autowired
+    private PublicationMapper publicationMapper;
         public StoreDTO storeToDTO(Store store) {
             StoreDTO storeDTO = new StoreDTO();
             storeDTO.setIdStore(store.getIdStore());
             storeDTO.setSeller_id(store.getUser().getSeller_id());
             storeDTO.setSellername(store.getUser().getUser().getName());
-            storeDTO.setPublications(store.getPublications());
+            storeDTO.setPublications(publicationMapper.toPublicationDTO(store.getPublications()));
             storeDTO.setPaymentMethods(store.getPaymentMethods());
             return storeDTO;
         }
 
-        public Store DTOtoStore(StoreDTO storeDTO) {
-            Store store = new Store();
-            store.setIdStore(storeDTO.getIdStore());
-            store.setPublications(storeDTO.getPublications());
-            store.setPaymentMethods(storeDTO.getPaymentMethods());
-            return store;
-        }
+
+
 
 }

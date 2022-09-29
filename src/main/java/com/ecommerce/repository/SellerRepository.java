@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Long> {
         Optional<Seller> findById(Long id);
-        List<Seller> findAll();
 
 }
 

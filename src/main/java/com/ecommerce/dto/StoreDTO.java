@@ -17,6 +17,6 @@ public class StoreDTO {
     private Long idStore;
     private Long seller_id;
     private String sellername;
-    private List<Publication> publications;
+    private List<PublicationDTO> publications;
     private List<PaymentMethod> paymentMethods;
 }

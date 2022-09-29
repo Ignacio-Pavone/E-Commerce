@@ -44,6 +44,21 @@ public class UserService {
         return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(() -> new Error("User not found")));
     }
 
+    public List<ShowUserDTO> findByNameShowUserList(String name) throws Error {
+        List <ShowUserDTO> lista = new ArrayList<>();
+        if (userRepository.findByName(name).isPresent()){
+            lista.add(userMapper.usertoShowDTO(userRepository.findByName(name).get()));
+        }
+        return lista;
+    }
+
+    public ShowUserDTO update(Long id, UserDTO user) throws Error {
+        User user1 = userRepository.findById(id).orElseThrow(() -> new Error("User not found"));
+        user1.setName(user.getName());
+        user1.setPassword(user.getPassword());
+        return userMapper.usertoShowDTO(userRepository.save(user1));
+    }
+
     public UserDTO save(UserDTO user) throws Error {
         Optional<User> userOptional = userRepository.findByName(user.getName());
         if (userOptional.isPresent()) {

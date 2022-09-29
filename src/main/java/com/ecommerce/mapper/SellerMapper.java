@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class SellerMapper {
     @Autowired
-    private UserMapper userMapper;
+    private SellProductMapper sellProductMapper;
     public ShowSellerDTO toShowSellerDTO(Seller seller) {
         ShowSellerDTO showSellerDTO = new ShowSellerDTO();
         showSellerDTO.setSeller_id(seller.getSeller_id());
         showSellerDTO.setUsername(seller.getUser().getName());
         showSellerDTO.setRole(seller.getUser().getRole().getRole().name());
-        showSellerDTO.setSellProducts(seller.getSellProducts());
+        showSellerDTO.setSellProducts(sellProductMapper.showSellProductDTOSlist2(seller.getSellProducts()));
         return showSellerDTO;
     }
 
