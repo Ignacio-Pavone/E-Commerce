@@ -2,10 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
-import com.ecommerce.mapper.PublicationMapper;
-import com.ecommerce.mapper.SellProductMapper;
-import com.ecommerce.mapper.SimpleStoreMapper;
-import com.ecommerce.mapper.StoreMapper;
+import com.ecommerce.mapper.*;
 import com.ecommerce.model.*;
 import com.ecommerce.repository.PublicationRepository;
 import com.ecommerce.repository.SellProductRepository;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -38,6 +36,9 @@ public class StoreService {
     private SellProductRepository sellProductRepository;
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
+
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
 
 
     public List<StoreDTO> findall() {
@@ -133,17 +134,24 @@ public class StoreService {
         throw new Error("Publication not found");
     }
 
-
     //TODO CONSULTAR TODO LO DE ABAJO
-
     public String addProductToShoppingCart(Long id, Long idproduct) throws Error {
-
         SellProduct nuevo = storeFindProduct(id, idproduct);
+
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.getProductList().add(nuevo);
-        shoppingCart.setTotalProducts(shoppingCart.getTotalProducts() + 1);
-        shoppingCart.setTotalPrice(getTotalPrice(shoppingCart) + nuevo.getProduct().getBasePrice());
+        shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
+        shoppingCart.setTotalPrice(getTotalPrice(shoppingCart));
+        shoppingCartRepository.save(shoppingCart);
+        return "Product added to shopping cart";
+    }
 
+    public String addMoreProductstoShopping (Long idStore, Long idProduct ,Long idShopping) throws Error {
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
+        SellProduct nuevo = storeFindProduct(idStore, idProduct);
+        shoppingCart.getProductList().add(nuevo);
+        shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
+        shoppingCart.setTotalPrice(getTotalPrice(shoppingCart));
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
     }
@@ -159,14 +167,33 @@ public class StoreService {
     public SellProduct storeFindProduct(Long id, Long idproduct) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         for (Publication publication : store.getPublications()) {
-            if (publication.getSellProduct().getId().equals(idproduct)) {
+            if (publication.getSellProduct().getId().equals(idproduct) && publication.getIsActive()) {
                 return publication.getSellProduct();
+            }else{
+                throw new Error("Product not found or Publication is not active");
             }
         }
         throw new Error("Product not found");
     }
 
-    public List<ShoppingCart> getShoppingCart() {
-        return shoppingCartRepository.findAll();
+    public List<ShoppingCartDTO> getShoppingCart() {
+        return shoppingCartMapper.shoppingCartEntityList2DTOList(shoppingCartRepository.findAll());
     }
+
+    public ShoppingCartDTO getShoppingCartById(Long id) throws Error {
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
+        return shoppingCartMapper.shoppingCartToDTO(shoppingCart);
+    }
+
+    public String checkoOut (Long id) throws Error {
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
+        HashMap<Integer,String> map = new HashMap<>();
+        map.put(1, "Total Price " + getTotalPrice(shoppingCart).toString());
+        map.put(2, "Total Products " + shoppingCart.getTotalProducts().toString());
+        map.put(3, "Products" + shoppingCart.getProductList().toString());
+        shoppingCartRepository.delete(shoppingCart);
+        return map.toString() + "Checkout done - Thanks for your purchase";
+    }
+
+
 }

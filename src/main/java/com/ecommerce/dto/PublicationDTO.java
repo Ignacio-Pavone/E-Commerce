@@ -8,8 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PublicationDTO {
-    @JsonIgnore
-    @JsonIgnoreProperties
     private Long id;
     private String publicationName;
     private String productName;
