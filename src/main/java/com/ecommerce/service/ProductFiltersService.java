@@ -11,19 +11,14 @@ import java.util.List;
 public class ProductFiltersService {
     public Specification<ShowSellProductDTO> getByFilters(ProductFilterDTO sellProduct) {
         return (root, query, criteriaBuilder) -> {
-
-            // Se crea la lista de predicados
             List<Predicate> predicates = new ArrayList<>();
 
-            // Busqueda por nombre
             if (StringUtils.hasLength(sellProduct.getName())) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + sellProduct.getName().toLowerCase() + "%"));
             }
 
-            // definir orden
             String orderByField = "name";
             query.orderBy(sellProduct.isASC() ? criteriaBuilder.asc(root.get(orderByField)) : criteriaBuilder.desc(root.get(orderByField)));
-
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
 

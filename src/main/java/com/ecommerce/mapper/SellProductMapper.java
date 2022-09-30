@@ -18,17 +18,6 @@ public class SellProductMapper {
         sellProductDTO.setDescription(sellProduct.getProduct().getDescription());
         return sellProductDTO;
     }
-
-    public SellProduct dtoToSellProduct(ShowSellProductDTO sellProductDTO) {
-        SellProduct sellProduct = new SellProduct();
-        Product product = new Product();
-        product.setName(sellProductDTO.getName());
-        product.setDescription(sellProductDTO.getDescription());
-        sellProduct.setProduct(product);
-        sellProduct.setSellingPrice(sellProductDTO.getPrice());
-        return sellProduct;
-    }
-
     public List<ShowSellProductDTO> sellproductEntityList2DTOList(List<Product> sellProducts) {
         List<ShowSellProductDTO> sellProductDTOList = new ArrayList<>();
         for (Product sellProduct : sellProducts) {
@@ -54,6 +43,7 @@ public class SellProductMapper {
         }
         return sellProductDTOList;
     }
+
 
 
 }

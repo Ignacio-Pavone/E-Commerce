@@ -14,6 +14,7 @@ public class PublicationMapper {
         publicationDTO.setId(publication.getId());
         publicationDTO.setPublicationName(publication.getPublicationName());
         publicationDTO.setIdSellProduct(publication.getId_sellproduct());
+        publicationDTO.setProductName(publication.getSellProduct().getProduct().getName());
         publicationDTO.setStock(publication.getStock());
         publicationDTO.setPrice(publication.getPrice());
         publicationDTO.setIsActive(publication.getIsActive());

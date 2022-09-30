@@ -65,7 +65,6 @@ public class SellerService {
         SellProduct sellProduct = new SellProduct();
         sellProduct.setProduct(product);
         sellProduct.setSellingPrice(product.getBasePrice() + buff.getPrice());
-
         List<SellerCustomization> sellerCustomizations = new ArrayList<>();
         sellerCustomizations.add(sellerCustom);
         sellProduct.setSellerCustomizations(sellerCustomizations);

@@ -21,7 +21,7 @@ public class Publication {
     private String publicationName;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_sellproduct",nullable = true,insertable=false, updatable=false)
-    private SellProduct sellProduct; // gorra
+    private SellProduct sellProduct;
 
     @JsonProperty("id_sellproduct")
     @JsonIgnoreProperties("id_sellproduct")
@@ -43,4 +43,18 @@ public class Publication {
         this.isActive = false;
     }
 
+
+    @Override
+    public String toString() {
+        return "Publication{" +
+                "id=" + id +
+                ", publicationName='" + publicationName + '\'' +
+                ", sellProduct=" + sellProduct +
+                ", id_sellproduct=" + id_sellproduct +
+                ", stock='" + stock + '\'' +
+                ", price=" + price +
+                ", isActive=" + isActive +
+                ", store_id=" + store_id +
+                '}';
+    }
 }

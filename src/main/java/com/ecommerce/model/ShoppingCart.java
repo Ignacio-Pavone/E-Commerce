@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,8 +14,9 @@ public class ShoppingCart {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id_shopping_cart;
-   @ManyToMany(cascade = CascadeType.ALL)
-   private List<SellProduct> productList;
-   private Integer totalProducts;
-   private Double totalPrice;
+   @OneToMany(cascade = CascadeType.ALL)
+   private List<SellProduct> productList = new ArrayList<>();
+   private Integer totalProducts = 0;
+   private Double totalPrice = 0.0;
+
 }

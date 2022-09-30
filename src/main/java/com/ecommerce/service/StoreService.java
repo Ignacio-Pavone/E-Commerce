@@ -1,9 +1,6 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dto.PublicationDTO;
-import com.ecommerce.dto.ShowSellProductDTO;
-import com.ecommerce.dto.SimpleStoreDTO;
-import com.ecommerce.dto.StoreDTO;
+import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.PublicationMapper;
 import com.ecommerce.mapper.SellProductMapper;
@@ -11,6 +8,8 @@ import com.ecommerce.mapper.SimpleStoreMapper;
 import com.ecommerce.mapper.StoreMapper;
 import com.ecommerce.model.*;
 import com.ecommerce.repository.PublicationRepository;
+import com.ecommerce.repository.SellProductRepository;
+import com.ecommerce.repository.ShoppingCartRepository;
 import com.ecommerce.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,9 +33,12 @@ public class StoreService {
     @Autowired
     private PublicationMapper publicationMapper;
     @Autowired
-    private SellProductMapper sellProductMapper;
-    @Autowired
     private SimpleStoreMapper simpleStoreMapper;
+    @Autowired
+    private SellProductRepository sellProductRepository;
+    @Autowired
+    private ShoppingCartRepository shoppingCartRepository;
+
 
     public List<StoreDTO> findall() {
         List<Store> store = storeRepository.findAll();
@@ -69,23 +71,24 @@ public class StoreService {
         if (store == null) {
             throw new Error("Store not found");
         }
-        List<ShowSellProductDTO> products = productService.findAllsellProducts();
+        List<ShowSellProductDTO> products = productService.findAllsellProducts(); //TODO VERIFICAR QUE EL PRODUCTO SEA DEL USUARIO
         for (ShowSellProductDTO product : products) {
             if (product.getId().equals(publication.getIdSellProduct())) {
                 Publication publication1 = new Publication();
+                SellProduct buff = sellProductRepository.findById(publication.getIdSellProduct()).orElseThrow(() -> new Error("Product not found"));
                 publication1.setPublicationName(publication.getPublicationName());
                 publication1.setStock(publication.getStock());
-                publication1.setPrice(product.getPrice() + publication.getPrice());
+                publication1.setPrice(product.getPrice());
                 publication1.setIsActive(publication.getIsActive());
                 publication1.setId_sellproduct(publication.getIdSellProduct());
                 publication1.setStore_id(id);
-                publicationService.createPublication(publication1); // problema aca
+                publication1.setSellProduct(buff);
+                publicationService.createPublication(publication1);
                 return publicationMapper.toPublicationDTO(publication1);
             }
         }
         throw new Error("Product not found");
     }
-
 
     public Store deleteStore(Long id) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
@@ -94,14 +97,14 @@ public class StoreService {
     }
 
     public Store addPaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
-            Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
-            for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
-                if (paymentMethod1.equals(paymentMethod)) {
-                    throw new Error("Payment method already exists");
-                }
+        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
+        for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
+            if (paymentMethod1.equals(paymentMethod)) {
+                throw new Error("Payment method already exists");
             }
-            store.getPaymentMethods().add(paymentMethod);
-            return storeRepository.save(store);
+        }
+        store.getPaymentMethods().add(paymentMethod);
+        return storeRepository.save(store);
     }
 
     public Store removePaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
@@ -128,5 +131,42 @@ public class StoreService {
             }
         }
         throw new Error("Publication not found");
+    }
+
+
+    //TODO CONSULTAR TODO LO DE ABAJO
+
+    public String addProductToShoppingCart(Long id, Long idproduct) throws Error {
+
+        SellProduct nuevo = storeFindProduct(id, idproduct);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.getProductList().add(nuevo);
+        shoppingCart.setTotalProducts(shoppingCart.getTotalProducts() + 1);
+        shoppingCart.setTotalPrice(getTotalPrice(shoppingCart) + nuevo.getProduct().getBasePrice());
+
+        shoppingCartRepository.save(shoppingCart);
+        return "Product added to shopping cart";
+    }
+
+    public Double getTotalPrice(ShoppingCart shop) {
+        Double total = 0.0;
+        for (SellProduct sellProduct : shop.getProductList()) {
+            total += sellProduct.getSellingPrice();
+        }
+        return total;
+    }
+
+    public SellProduct storeFindProduct(Long id, Long idproduct) throws Error {
+        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
+        for (Publication publication : store.getPublications()) {
+            if (publication.getSellProduct().getId().equals(idproduct)) {
+                return publication.getSellProduct();
+            }
+        }
+        throw new Error("Product not found");
+    }
+
+    public List<ShoppingCart> getShoppingCart() {
+        return shoppingCartRepository.findAll();
     }
 }

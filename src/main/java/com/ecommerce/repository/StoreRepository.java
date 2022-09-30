@@ -11,5 +11,4 @@ import java.util.List;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findAll();
-    Store findStoreByUser_User_Name(String name);
 }

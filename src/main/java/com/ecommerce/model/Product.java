@@ -37,5 +37,16 @@ public class Product {
     @JsonBackReference
     private Long custom_id;
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", basePrice=" + basePrice +
+                ", description='" + description + '\'' +
+                ", manufacturingTime='" + manufacturingTime + '\'' +
+                ", baseCustomizationOptions=" + baseCustomizationOptions +
+                ", custom_id=" + custom_id +
+                '}';
+    }
 }

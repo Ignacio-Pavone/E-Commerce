@@ -14,6 +14,7 @@ public class SimplePublicationMapper {
         SimplePublicationDTO simpleStore = new SimplePublicationDTO();
         simpleStore.setPublicationName(store.getPublicationName());
         simpleStore.setIsActive(store.getIsActive());
+        simpleStore.setProductName(store.getSellProduct().getProduct().getName());
         simpleStore.setStock(store.getStock());
         simpleStore.setPrice(store.getPrice());
         return simpleStore;

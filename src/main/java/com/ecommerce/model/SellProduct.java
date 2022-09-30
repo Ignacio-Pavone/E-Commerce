@@ -43,4 +43,13 @@ public class SellProduct {
     }
 
 
+    @Override
+    public String toString() {
+        return "SellProduct{" +
+                "id=" + id +
+                ", product=" + product +
+                ", sellingPrice=" + sellingPrice +
+                ", sellerCustomizations=" + sellerCustomizations +
+                '}';
+    }
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class SimplePublicationDTO {
     private String publicationName;
+    private String productName;
     private Boolean isActive;
     private Double price;
     private String stock;

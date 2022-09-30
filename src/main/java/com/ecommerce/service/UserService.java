@@ -7,6 +7,8 @@ import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,13 +34,12 @@ public class UserService {
         return userMapper.usertoShowDTO(userRepository.findById(id).orElseThrow(() -> new Error("User not found")));
     }
 
-    public List<ShowUserDTO> findAll() {
-        List<User> users = userRepository.findAll();
-        List<ShowUserDTO> showUserDTOS = new ArrayList<>();
-        for (User user : users) {
-            showUserDTOS.add(userMapper.usertoShowDTO(user));
+    public List<ShowUserDTO> findAll( ) {
+        List<ShowUserDTO> showUserDTOList = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            showUserDTOList.add(userMapper.usertoShowDTO(user));
         }
-        return showUserDTOS;
+        return showUserDTOList;
     }
     public ShowUserDTO findByNameShowUser(String name) throws Error {
         return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(() -> new Error("User not found")));
