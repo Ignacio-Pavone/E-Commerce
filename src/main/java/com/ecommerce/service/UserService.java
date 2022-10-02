@@ -6,6 +6,7 @@ import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,8 +48,8 @@ public class UserService {
 
     public List<ShowUserDTO> findByNameShowUserList(String name) throws Error {
         List <ShowUserDTO> lista = new ArrayList<>();
-        if (userRepository.findByName(name).isPresent()){
-            lista.add(userMapper.usertoShowDTO(userRepository.findByName(name).get()));
+        for (User user : userRepository.findAllByName(name)) {
+            lista.add(userMapper.usertoShowDTO(user));
         }
         return lista;
     }
@@ -82,6 +83,17 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public ShowUserDTO login(String nombre, String password) {
+        List<User> users = userRepository.findAllByName(nombre);
+        System.out.println(users);
+        for (User user : users) {
+            if (user.getName().equals(nombre))
+                if (user.getPassword().equals(password))
+                    return userMapper.usertoShowDTO(user);
+        }
+        return null;
     }
 
 

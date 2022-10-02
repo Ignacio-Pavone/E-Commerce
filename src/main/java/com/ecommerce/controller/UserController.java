@@ -25,14 +25,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ShowUserDTO>> getAll() {
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
-    }
-
-    //TODO: me devuelve 2 necesito lista
-    @GetMapping(params = "name")
-    public ResponseEntity<List<ShowUserDTO>> findCharacterByName (@RequestParam(value = "name", required = false) String name) throws Error {
-        if (name == null) {
+    public ResponseEntity<List<ShowUserDTO>> getAll (@RequestParam(value = "name", required = false) String name) throws Error {
+        if (name == null || userService.findByNameShowUserList(name).isEmpty()) {
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(userService.findByNameShowUserList(name), HttpStatus.OK);
@@ -44,8 +38,8 @@ public class UserController {
         return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO user) throws Error {
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserDTO user) throws Error {
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
@@ -61,6 +55,17 @@ public class UserController {
     @PatchMapping("/setrole/{id}")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<String> login (@RequestParam(value = "name", required = false) String name, @RequestParam(value = "password", required = false) String password) throws Error {
+        if (name == null || password == null) {
+            return new ResponseEntity<>("You Must fill the parameters", HttpStatus.UNAUTHORIZED);
+        } else if (userService.login(name, password) != null) {
+            return new ResponseEntity<>("Welcome " + name, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Name or password incorrect",HttpStatus.UNAUTHORIZED);
+        }
     }
 
 
