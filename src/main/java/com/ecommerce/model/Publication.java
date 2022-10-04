@@ -19,7 +19,7 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String publicationName;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name="id_sellproduct",nullable = true,insertable=false, updatable=false)
     private SellProduct sellProduct;
 
@@ -30,7 +30,6 @@ public class Publication {
     private String stock;
     private Double price;
     private Boolean isActive;
-
     @JsonProperty("store_id")
     @JsonIgnoreProperties("store_id")
     @JsonBackReference

@@ -26,7 +26,7 @@ public class SwaggerDoc {
     private ApiInfo apiInfoMetaData() {
 
         return new ApiInfoBuilder().title("E Commerce API")
-                .description("Softtek Project For UTN BA - SpringBoot Academy")
+                .description("Softtek Project For UTN BA - Java Academy")
                 .contact(new Contact("Ignacio Pavone", "https://github.com/Ignacio-Pavone", "ignaciopavone@gmail.com"))
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")

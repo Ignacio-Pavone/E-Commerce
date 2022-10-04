@@ -15,12 +15,24 @@ public class ShoppingCart {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id_shopping_cart;
 
-   @ManyToMany (fetch = FetchType.LAZY)
+   @ManyToMany (cascade = CascadeType.ALL, fetch=FetchType.EAGER)
    @JoinTable(name = "shopping_cart_sell_product",
            joinColumns = @JoinColumn(name = "id_shopping_cart"),
            inverseJoinColumns = @JoinColumn(name = "id_sell_product"))
-   private List<SellProduct> productList = new ArrayList<>();
+   private List<Item> productList = new ArrayList<>();
    private Integer totalProducts = 0;
    private Double totalPrice = 0.0;
 
+   private Long Store;
+
+
+   @Override
+   public String toString() {
+      return "ShoppingCart{" +
+              "id_shopping_cart=" + id_shopping_cart +
+              ", productList=" + productList +
+              ", totalProducts=" + totalProducts +
+              ", totalPrice=" + totalPrice +
+              '}';
+   }
 }

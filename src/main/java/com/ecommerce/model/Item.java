@@ -9,22 +9,24 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseCustomization {
+@Entity (name = "item")
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String sector_custom;
-    private String option_custom;
+    @OneToOne (cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)
+    private SellProduct sellProduct;
+    private Integer quantity;
+
 
     @Override
     public String toString() {
-        return "BaseCustomization{" +
+        return "Item{" +
                 "id=" + id +
-                ", sector_custom='" + sector_custom + '\'' +
-                ", option_custom='" + option_custom + '\'' +
+                ", sellProduct=" + sellProduct +
+                ", quantity=" + quantity +
                 '}';
     }
 }

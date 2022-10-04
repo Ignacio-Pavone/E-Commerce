@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class ShoppingCartDTO {
     private Long id_shopping_cart;
-    private List<ShowSellProductDTO> product;
+    private List<ItemShowDTO> product;
     private Integer totalProducts;
     private Double totalPrice;
 

@@ -1,6 +1,8 @@
 package com.ecommerce.mapper;
 
+import com.ecommerce.dto.ItemShowDTO;
 import com.ecommerce.dto.ShoppingCartDTO;
+import com.ecommerce.model.Item;
 import com.ecommerce.model.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,13 +15,6 @@ public class ShoppingCartMapper {
     @Autowired
     private SellProductMapper sellProductMapper;
 
-    public ShoppingCartDTO shoppingCartToDTO(ShoppingCart shoppingCart) {
-        ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
-        shoppingCartDTO.setId_shopping_cart(shoppingCart.getId_shopping_cart());
-        shoppingCartDTO.setProduct(sellProductMapper.showSellProductDTOSlist2(shoppingCart.getProductList()));
-        shoppingCartDTO.setTotalPrice(shoppingCart.getTotalPrice( ));
-        return shoppingCartDTO;
-    }
 
     public ShoppingCart dtoToShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -29,18 +24,27 @@ public class ShoppingCartMapper {
         return shoppingCart;
     }
 
-    public List<ShoppingCartDTO> shoppingCartEntityList2DTOList(List<ShoppingCart> shoppingCarts) {
-        List<ShoppingCartDTO> shoppingCartDTOList = new ArrayList<>();
-        for (ShoppingCart shoppingCart : shoppingCarts) {
-            ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
-            shoppingCartDTO.setId_shopping_cart(shoppingCart.getId_shopping_cart());
-            shoppingCartDTO.setProduct(sellProductMapper.showSellProductDTOSlist2(shoppingCart.getProductList()));
-            shoppingCartDTO.setTotalPrice(shoppingCart.getTotalPrice());
-            shoppingCartDTO.setTotalProducts(shoppingCart.getTotalProducts());
-            shoppingCartDTOList.add(shoppingCartDTO);
-        }
-        return shoppingCartDTOList;
+    public ShoppingCartDTO shoppingCartToDTO(ShoppingCart shoppingCart) {
+        ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
+        shoppingCartDTO.setId_shopping_cart(shoppingCart.getId_shopping_cart());
+        shoppingCartDTO.setProduct(itemListToItemShowDTOList(shoppingCart.getProductList()));
+        shoppingCartDTO.setTotalProducts(shoppingCart.getTotalProducts());
+        shoppingCartDTO.setTotalPrice(shoppingCart.getTotalPrice());
+        return shoppingCartDTO;
     }
+
+    public List<ItemShowDTO> itemListToItemShowDTOList(List<Item> itemList) {
+        List<ItemShowDTO> itemShowDTOList = new ArrayList<>();
+        for (Item item : itemList) {
+            ItemShowDTO itemShowDTO = new ItemShowDTO();
+            itemShowDTO.setQuantity(item.getQuantity());
+            itemShowDTO.setProducto(sellProductMapper.sellProductToDTO(item.getSellProduct()));
+            itemShowDTOList.add(itemShowDTO);
+        }
+        return itemShowDTOList;
+    }
+
+
 
 
 }

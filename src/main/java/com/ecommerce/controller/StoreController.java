@@ -4,6 +4,7 @@ package com.ecommerce.controller;
 import com.ecommerce.converters.PaymentConverter;
 import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
+import com.ecommerce.mapper.ShoppingCartMapper;
 import com.ecommerce.model.SellProduct;
 import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.model.Store;
@@ -20,6 +21,8 @@ import java.util.List;
 public class StoreController {
     @Autowired
     private StoreService storeService;
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
 
     @GetMapping()
     public ResponseEntity<List<StoreDTO>> getAll() {
@@ -63,29 +66,26 @@ public class StoreController {
         return new ResponseEntity<>(storeService.updatepublicationStatus(idstore, idpublication, state), HttpStatus.OK);
     }
 
-    @PostMapping("/{idstore}/shoppingcart/{idproduct}")
-    public ResponseEntity<String> addProductToShoppingCart(@PathVariable("idstore") Long idstore, @PathVariable("idproduct") Long idproduct) throws Error {
-        return new ResponseEntity<>(storeService.addProductToShoppingCart(idstore, idproduct), HttpStatus.OK);
-    }
-    @PostMapping("/{idstore}/shoppingcart/{idproduct}/{idshoppingcart}")
-    public ResponseEntity<String> addProductToShoppingCart(@PathVariable("idstore") Long idstore, @PathVariable("idproduct") Long idproduct, @PathVariable("idshoppingcart") Long idshoppingcart) throws Error {
-        return new ResponseEntity<>(storeService.addMoreProductstoShopping(idstore, idproduct, idshoppingcart), HttpStatus.OK);
+    @PostMapping("/addproduct/{idstore}/shoppingcart/{idproduct}/{quantity}")
+    public ResponseEntity<String> addProduct(@PathVariable("idstore") Long idstore, @PathVariable("idproduct") Long idproduct, @PathVariable("quantity") Integer quantity) throws Error {
+        return new ResponseEntity<>(storeService.addProductToShoppingCart(idstore, idproduct, quantity), HttpStatus.OK);
     }
 
-    @GetMapping("/shoppingcart")
-    public ResponseEntity<List<ShoppingCartDTO>> getShoppingCart() throws Error {
-        return new ResponseEntity<>(storeService.getShoppingCart(), HttpStatus.OK);
+    @PostMapping("/addmoreproduct/{idstore}/{shoppingcart}/{idproduct}/{quantity}")
+    public ResponseEntity<String> addMoreProduct(@PathVariable("idstore") Long idstore, @PathVariable("shoppingcart") Long shoppingcart, @PathVariable("idproduct") Long idproduct, @PathVariable("quantity") Integer quantity) throws Error {
+        return new ResponseEntity<>(storeService.addMoreProductstoShopping(idstore, shoppingcart, idproduct, quantity), HttpStatus.OK);
     }
 
     @GetMapping("/shoppingcart/{id}")
-    public ResponseEntity<ShoppingCartDTO> getShoppingCartById(@PathVariable("id") Long id) throws Error {
-        return new ResponseEntity<>(storeService.getShoppingCartById(id), HttpStatus.OK);
+    public ResponseEntity<ShoppingCartDTO> getShoppingCart(@PathVariable("id") Long id) throws Error {
+        return new ResponseEntity<>(shoppingCartMapper.shoppingCartToDTO(storeService.getShoppingCart(id)), HttpStatus.OK);
     }
 
-    @GetMapping("/shoppingcart/{id}/checkout")
-    public ResponseEntity<String> checkoutShoppingCart(@PathVariable("id") Long id) throws Error {
+    @PostMapping("/shoppingcart/{id}/checkout")
+    public ResponseEntity<String> checkout(@PathVariable("id") Long id) throws Error {
         return new ResponseEntity<>(storeService.checkoOut(id), HttpStatus.OK);
     }
+
 
 
 

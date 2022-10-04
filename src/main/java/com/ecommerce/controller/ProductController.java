@@ -7,6 +7,7 @@ import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
+import com.ecommerce.repository.SellProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private SellProductRepository sellProductRepository;
 
     @GetMapping()
     public ResponseEntity<List<Product>> getAll() {
@@ -44,6 +47,12 @@ public class ProductController {
     @GetMapping("/allsell")
     public ResponseEntity<List<ShowSellProductDTO>> getAllSell() {
         return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/sellproducts")
+    public ResponseEntity<List<SellProduct>> getSellProducts() {
+        return new ResponseEntity<>(sellProductRepository.findAll(), HttpStatus.OK);
     }
 
 
