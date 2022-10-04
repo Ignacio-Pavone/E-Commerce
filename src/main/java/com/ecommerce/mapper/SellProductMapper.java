@@ -3,6 +3,7 @@ package com.ecommerce.mapper;
 import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
+import com.ecommerce.model.SellerCustomization;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ public class SellProductMapper {
         sellProductDTO.setId(sellProduct.getId());
         sellProductDTO.setName(sellProduct.getProduct().getName());
         sellProductDTO.setPrice(sellProduct.getSellingPrice());
-        sellProductDTO.setDescription(sellProduct.getProduct().getDescription());
+        for (SellerCustomization sellcustom : sellProduct.getSellerCustomizations()) {
+            sellProductDTO.setDescription(sellcustom.getDescription());
+        }
         return sellProductDTO;
     }
     public List<ShowSellProductDTO> sellproductEntityList2DTOList(List<Product> sellProducts) {
@@ -38,7 +41,9 @@ public class SellProductMapper {
             sellProductDTO.setId(sellProduct.getId());
             sellProductDTO.setName(sellProduct.getProduct().getName());
             sellProductDTO.setPrice(sellProduct.getSellingPrice());
-            sellProductDTO.setDescription(sellProduct.getProduct().getDescription());
+            for (SellerCustomization sellcustom : sellProduct.getSellerCustomizations()) {
+                sellProductDTO.setDescription(sellcustom.getDescription());
+            }
             sellProductDTOList.add(sellProductDTO);
         }
         return sellProductDTOList;

@@ -191,12 +191,12 @@ public class StoreService {
         throw new Error("Product is not from this store");
     }
 
-    public String checkoOut (Long id) throws Error {
+    public String checkoOut(Long id) throws Error {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
-        HashMap<String,String> map = new HashMap<>();
-        map.put("Total Price" , shoppingCart.getTotalPrice().toString());
-        map.put("Total Products" ,shoppingCart.getTotalProducts().toString());
-        map.put("Products" , shoppingCart.getProductList().toString());
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Total Price", shoppingCart.getTotalPrice().toString());
+        map.put("Total Products", shoppingCart.getTotalProducts().toString());
+        map.put("Products", shoppingCart.getProductList().toString());
         for (Iterator it = shoppingCart.getProductList().iterator(); it.hasNext(); ) {
             Item item = (Item) it.next();
             it.remove();
@@ -206,4 +206,22 @@ public class StoreService {
         return map.toString() + "Checkout done - Thanks for your purchase";
     }
 
+    public String deleteProductFromShoppingCart(Long idShopping, Long idProduct) throws Error {
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
+        for (Item item : shoppingCart.getProductList()) {
+            if (item.getSellProduct().getId().equals(idProduct)) {
+                shoppingCart.getProductList().remove(item);
+                shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
+                shoppingCart.setTotalPrice(getTotalPrice(shoppingCart, item.getQuantity()));
+                if (shoppingCart.getProductList().size() == 0) {
+                    shoppingCartRepository.delete(shoppingCart);
+                }
+                shoppingCartRepository.save(shoppingCart);
+                return "Product removed from shopping cart";
+            }
+        }
+
+
+        throw new Error("Product not found");
+    }
 }

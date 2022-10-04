@@ -44,9 +44,9 @@ public class SellerController {
         return new ResponseEntity<>(sellerService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/buy")
-    public ResponseEntity<ShowSellProductDTO> buyProduct(@RequestBody @Valid SellerProductAddDTO productToBuy) throws Error {
-        return new ResponseEntity<>(sellerService.buyProductbySeller(productToBuy), HttpStatus.CREATED);
+    @PostMapping("/chooseproduct/{idSeller}/{idProduct}")
+    public ResponseEntity<ShowSellProductDTO> buyProduct(@PathVariable("idProduct") Long idProduct,@PathVariable("idSeller") Long idSeller, @RequestBody @Valid SellerProductAddDTO productToBuy) throws Error {
+        return new ResponseEntity<>(sellerService.buyProductbySeller(productToBuy, idSeller,idProduct), HttpStatus.CREATED);
     }
 
 
