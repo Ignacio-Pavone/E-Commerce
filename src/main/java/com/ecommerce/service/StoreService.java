@@ -4,14 +4,12 @@ import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.*;
 import com.ecommerce.model.*;
-import com.ecommerce.repository.PublicationRepository;
-import com.ecommerce.repository.SellProductRepository;
-import com.ecommerce.repository.ShoppingCartRepository;
-import com.ecommerce.repository.StoreRepository;
+import com.ecommerce.exception.repository.SellProductRepository;
+import com.ecommerce.exception.repository.ShoppingCartRepository;
+import com.ecommerce.exception.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,18 +155,21 @@ public class StoreService {
 
     public String addProductToShoppingCart(Long idStore, Long idProduct, Integer quantity) throws Error {
         SellProduct nuevo = storeFindProduct(idStore, idProduct);
-        Item item = new Item();
-        item.setSellProduct(nuevo);
-        item.setQuantity(quantity);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.getProductList().add(item);
-        shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
-        shoppingCart.setTotalPrice(getTotalPrice(shoppingCart, quantity));
-        shoppingCart.setStore(idStore);
-        shoppingCart.setBuyDate(LocalDate.now());
+        Item item = new Item(nuevo, quantity);
+        List<Item> items = new ArrayList<>();
+        items.add(item);
+        ShoppingCart shoppingCart = new ShoppingCart(items, items.size(),getTotalPriceList(items,quantity),idStore,LocalDate.now());
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
 
+    }
+
+    public Double getTotalPriceList(List<Item> shop, Integer quantity) {
+        Double total = 0.0;
+        for (Item sellProduct : shop) {
+            total += sellProduct.getSellProduct().getSellingPrice();
+        }
+        return total * quantity;
     }
 
     public Double getTotalPrice(ShoppingCart shop, Integer quantity) {
@@ -183,12 +184,10 @@ public class StoreService {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
         SellProduct nuevo = storeFindProduct(idStore, idProduct);
         if (shoppingCart.getStore().equals(idStore)) {
-            Item item = new Item();
-            item.setSellProduct(nuevo);
-            item.setQuantity(quantity);
+            Item item = new Item(nuevo,quantity);
             shoppingCart.getProductList().add(item);
             shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
-            shoppingCart.setTotalPrice(getTotalPrice(shoppingCart, quantity));
+            shoppingCart.setTotalPrice((nuevo.getSellingPrice() * quantity)+ shoppingCart.getTotalPrice());
             shoppingCartRepository.save(shoppingCart);
             return "Product added to shopping cart";
         }
@@ -200,7 +199,7 @@ public class StoreService {
         HashMap<String, String> map = new HashMap<>();
         map.put("Total Price", shoppingCart.getTotalPrice().toString());
         map.put("Total Products", shoppingCart.getTotalProducts().toString());
-        map.put("Products", shoppingCart.getProductList().toString());
+       // map.put("Products", shoppingCart.getProductList().toString());
         map.put("Date", shoppingCart.getBuyDate().toString());
         for (Iterator it = shoppingCart.getProductList().iterator(); it.hasNext(); ) {
             Item item = (Item) it.next();

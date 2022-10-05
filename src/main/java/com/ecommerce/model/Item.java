@@ -21,6 +21,11 @@ public class Item {
     private Integer quantity;
 
 
+    public Item(SellProduct sellProduct, Integer quantity) {
+        this.sellProduct = sellProduct;
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
         return "Item{" +

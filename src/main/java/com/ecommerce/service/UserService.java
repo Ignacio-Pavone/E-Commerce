@@ -5,11 +5,8 @@ import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
-import com.ecommerce.repository.UserRepository;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import com.ecommerce.exception.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

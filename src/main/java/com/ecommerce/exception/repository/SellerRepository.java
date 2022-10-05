@@ -1,4 +1,4 @@
-package com.ecommerce.repository;
+package com.ecommerce.exception.repository;
 
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;

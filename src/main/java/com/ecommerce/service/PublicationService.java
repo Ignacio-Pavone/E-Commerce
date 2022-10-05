@@ -1,7 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.Publication;
-import com.ecommerce.repository.PublicationRepository;
+import com.ecommerce.exception.repository.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

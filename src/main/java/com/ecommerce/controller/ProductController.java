@@ -1,13 +1,11 @@
 package com.ecommerce.controller;
 
 
-import com.ecommerce.dto.ProductFilterDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
-import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
-import com.ecommerce.repository.SellProductRepository;
+import com.ecommerce.exception.repository.SellProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
