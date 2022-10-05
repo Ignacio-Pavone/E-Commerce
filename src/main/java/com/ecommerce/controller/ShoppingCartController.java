@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/shoppingcart")
 @RestController
 public class ShoppingCartController {
@@ -41,6 +43,11 @@ public class ShoppingCartController {
     @PatchMapping("/{idshoppingcart}/removeproduct/{idproduct}")
     public ResponseEntity<String> removeProduct(@PathVariable("idshoppingcart") Long idshoppingcart, @PathVariable("idproduct") Long idproduct) throws Error {
         return new ResponseEntity<>(storeService.deleteProductFromShoppingCart(idshoppingcart, idproduct), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ShoppingCartDTO>> getAllShoppingCarts() throws Error {
+        return new ResponseEntity<>(shoppingCartMapper.shoppingCartListToDTOList(storeService.getAllShoppingCart()), HttpStatus.OK);
     }
 
 }

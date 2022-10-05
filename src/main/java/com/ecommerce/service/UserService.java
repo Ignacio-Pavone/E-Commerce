@@ -24,9 +24,6 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    //TODO ENCRIPTAR CONTRASEÑA
-
-
     public User findById(Long characterId) throws Error {
         return userRepository.findById(characterId).orElseThrow(() -> new Error("User not found"));
     }
@@ -41,9 +38,6 @@ public class UserService {
             showUserDTOList.add(userMapper.usertoShowDTO(user));
         }
         return showUserDTOList;
-    }
-    public ShowUserDTO findByNameShowUser(String name) throws Error {
-        return userMapper.usertoShowDTO(userRepository.findByName(name).orElseThrow(() -> new Error("User not found")));
     }
 
     public List<ShowUserDTO> findByNameShowUserList(String name) throws Error {

@@ -18,17 +18,19 @@ public class ShoppingCartMapper {
 
     public ShoppingCart dtoToShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setId_shopping_cart(shoppingCartDTO.getId_shopping_cart());
+        shoppingCart.setId_shopping_cart(shoppingCartDTO.getIdShoppingCart());
         shoppingCart.setTotalProducts(shoppingCartDTO.getTotalProducts());
+        shoppingCart.setBuyDate(shoppingCartDTO.getBuyDate());
         shoppingCart.setTotalPrice(shoppingCartDTO.getTotalPrice());
         return shoppingCart;
     }
 
     public ShoppingCartDTO shoppingCartToDTO(ShoppingCart shoppingCart) {
         ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
-        shoppingCartDTO.setId_shopping_cart(shoppingCart.getId_shopping_cart());
-        shoppingCartDTO.setProduct(itemListToItemShowDTOList(shoppingCart.getProductList()));
+        shoppingCartDTO.setIdShoppingCart(shoppingCart.getId_shopping_cart());
+        shoppingCartDTO.setProducts(itemListToItemShowDTOList(shoppingCart.getProductList()));
         shoppingCartDTO.setTotalProducts(shoppingCart.getTotalProducts());
+        shoppingCartDTO.setBuyDate(shoppingCart.getBuyDate());
         shoppingCartDTO.setTotalPrice(shoppingCart.getTotalPrice());
         return shoppingCartDTO;
     }
@@ -38,13 +40,18 @@ public class ShoppingCartMapper {
         for (Item item : itemList) {
             ItemShowDTO itemShowDTO = new ItemShowDTO();
             itemShowDTO.setQuantity(item.getQuantity());
-            itemShowDTO.setProducto(sellProductMapper.sellProductToDTO(item.getSellProduct()));
+            itemShowDTO.setProduct(sellProductMapper.sellProductToDTO(item.getSellProduct()));
             itemShowDTOList.add(itemShowDTO);
         }
         return itemShowDTOList;
     }
 
-
-
+    public List<ShoppingCartDTO> shoppingCartListToDTOList(List<ShoppingCart> shoppingCartList) {
+        List<ShoppingCartDTO> shoppingCartDTOList = new ArrayList<>();
+        for (ShoppingCart shoppingCart : shoppingCartList) {
+            shoppingCartDTOList.add(shoppingCartToDTO(shoppingCart));
+        }
+        return shoppingCartDTOList;
+    }
 
 }

@@ -16,7 +16,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private SellProduct sellProduct;
     private Integer quantity;
 

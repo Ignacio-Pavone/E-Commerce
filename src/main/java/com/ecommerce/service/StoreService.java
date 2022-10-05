@@ -11,6 +11,8 @@ import com.ecommerce.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -135,6 +137,9 @@ public class StoreService {
         throw new Error("Publication not found");
     }
 
+    public List<ShoppingCart> getAllShoppingCart() throws Error {
+        return shoppingCartRepository.findAll();
+    }
 
     public ShoppingCart getShoppingCart(Long id) throws Error {
         return shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
@@ -150,7 +155,6 @@ public class StoreService {
         throw new Error("Product not found or not active");
     }
 
-
     public String addProductToShoppingCart(Long idStore, Long idProduct, Integer quantity) throws Error {
         SellProduct nuevo = storeFindProduct(idStore, idProduct);
         Item item = new Item();
@@ -161,7 +165,7 @@ public class StoreService {
         shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
         shoppingCart.setTotalPrice(getTotalPrice(shoppingCart, quantity));
         shoppingCart.setStore(idStore);
-        System.out.println(shoppingCart);
+        shoppingCart.setBuyDate(LocalDate.now());
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
 
@@ -197,6 +201,7 @@ public class StoreService {
         map.put("Total Price", shoppingCart.getTotalPrice().toString());
         map.put("Total Products", shoppingCart.getTotalProducts().toString());
         map.put("Products", shoppingCart.getProductList().toString());
+        map.put("Date", shoppingCart.getBuyDate().toString());
         for (Iterator it = shoppingCart.getProductList().iterator(); it.hasNext(); ) {
             Item item = (Item) it.next();
             it.remove();
@@ -213,6 +218,7 @@ public class StoreService {
                 shoppingCart.getProductList().remove(item);
                 shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
                 shoppingCart.setTotalPrice(getTotalPrice(shoppingCart, item.getQuantity()));
+                shoppingCart.setBuyDate(shoppingCart.getBuyDate());
                 if (shoppingCart.getProductList().size() == 0) {
                     shoppingCartRepository.delete(shoppingCart);
                 }
