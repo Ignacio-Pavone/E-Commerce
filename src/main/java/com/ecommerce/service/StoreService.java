@@ -1,9 +1,11 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.*;
 import com.ecommerce.model.*;
+import com.ecommerce.model.dto.PublicationDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.StoreDTO;
 import com.ecommerce.repository.SellProductRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
 import com.ecommerce.repository.StoreRepository;
@@ -32,8 +34,6 @@ public class StoreService {
     @Autowired
     private PublicationMapper publicationMapper;
     @Autowired
-    private SimpleStoreMapper simpleStoreMapper;
-    @Autowired
     private SellProductRepository sellProductRepository;
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
@@ -51,9 +51,9 @@ public class StoreService {
         return storeDTOS;
     }
 
-    public SimpleStoreDTO findbyId(Long id) throws Error {
+    public StoreDTO findbyId(Long id) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
-        return simpleStoreMapper.storeToSimpleStore(store);
+        return storeMapper.storeToDTO(store);
     }
 
     public Store createStore(Long id) throws Error {

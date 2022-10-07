@@ -1,6 +1,6 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
 import com.ecommerce.model.SellerCustomization;

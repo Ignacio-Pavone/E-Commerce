@@ -1,7 +1,7 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.ItemShowDTO;
-import com.ecommerce.dto.ShoppingCartDTO;
+import com.ecommerce.model.dto.ItemShowDTO;
+import com.ecommerce.model.dto.ShoppingCartDTO;
 import com.ecommerce.model.Item;
 import com.ecommerce.model.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;

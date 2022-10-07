@@ -1,13 +1,9 @@
 package com.ecommerce.controller;
-
-
 import com.ecommerce.converters.PaymentConverter;
-import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
-import com.ecommerce.mapper.ShoppingCartMapper;
-import com.ecommerce.model.SellProduct;
-import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.model.Store;
+import com.ecommerce.model.dto.PublicationDTO;
+import com.ecommerce.model.dto.StoreDTO;
 import com.ecommerce.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +24,7 @@ public class StoreController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SimpleStoreDTO> getStorebyID(@PathVariable Long id) throws Error {
+    public ResponseEntity<StoreDTO> getStorebyID(@PathVariable Long id) throws Error {
         return new ResponseEntity<>(storeService.findbyId(id), HttpStatus.FOUND);
     }
 

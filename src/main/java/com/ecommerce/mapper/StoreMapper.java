@@ -1,11 +1,9 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.StoreDTO;
+import com.ecommerce.model.dto.StoreDTO;
 import com.ecommerce.model.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class StoreMapper {

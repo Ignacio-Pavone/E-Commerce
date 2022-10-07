@@ -22,7 +22,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seller_id;
     @JoinColumn(name = "user_id", referencedColumnName = "id",insertable=false, updatable=false)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
     @JsonProperty("user_id")
     @JsonIgnoreProperties("user_id")

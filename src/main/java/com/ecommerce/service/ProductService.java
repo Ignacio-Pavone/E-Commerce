@@ -1,7 +1,7 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dto.ProductFilterDTO;
-import com.ecommerce.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ProductFilterDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.SellProductMapper;
 import com.ecommerce.model.Product;

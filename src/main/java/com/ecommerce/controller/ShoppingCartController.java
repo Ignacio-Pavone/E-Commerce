@@ -1,6 +1,6 @@
 package com.ecommerce.controller;
 
-import com.ecommerce.dto.ShoppingCartDTO;
+import com.ecommerce.model.dto.ShoppingCartDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.ShoppingCartMapper;
 import com.ecommerce.service.StoreService;

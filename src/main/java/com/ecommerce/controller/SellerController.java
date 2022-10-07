@@ -1,9 +1,9 @@
 package com.ecommerce.controller;
-
-
-import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Seller;
+import com.ecommerce.model.dto.SellerProductAddDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ShowSellerDTO;
 import com.ecommerce.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class SellerController {
     }
 
     @PostMapping("/chooseproduct/{idSeller}/{idProduct}")
-    public ResponseEntity<ShowSellProductDTO> buyProduct(@PathVariable("idProduct") Long idProduct,@PathVariable("idSeller") Long idSeller, @RequestBody @Valid SellerProductAddDTO productToBuy) throws Error {
+    public ResponseEntity<ShowSellProductDTO> buyProduct(@PathVariable("idProduct") Long idProduct, @PathVariable("idSeller") Long idSeller, @RequestBody @Valid SellerProductAddDTO productToBuy) throws Error {
         return new ResponseEntity<>(sellerService.buyProductbySeller(productToBuy, idSeller,idProduct), HttpStatus.CREATED);
     }
 

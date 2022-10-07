@@ -1,6 +1,6 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.SimplePublicationDTO;
+import com.ecommerce.model.dto.SimplePublicationDTO;
 import com.ecommerce.model.Publication;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,5 @@
-package com.ecommerce.dto;
+package com.ecommerce.model.dto;
 
-import com.ecommerce.model.Role;
-import com.ecommerce.model.SellProduct;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

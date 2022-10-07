@@ -1,7 +1,8 @@
 package com.ecommerce.mapper;
-import com.ecommerce.dto.ShowUserDTO;
-import com.ecommerce.dto.UserDTO;
+import com.ecommerce.model.dto.ShowUserDTO;
+import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.model.User;
+import com.ecommerce.model.dto.UserRegisterDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,12 +23,12 @@ public class UserMapper {
         userDTO.setRole_id(user.getRole_id());
         return userDTO;
     }
-    public User DTOtoUser(UserDTO userDTO){
+
+    public User DTOtoUser(UserRegisterDTO userDTO){
         User user = new User();
-        user.setId(userDTO.getId());
-        user.setName(userDTO.getName());
+        user.setName(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
-        user.setRole_id(userDTO.getRole_id());
+        user.setRole_id(userDTO.getRole());
         return user;
     }
 

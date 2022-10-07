@@ -1,10 +1,11 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dto.ShowUserDTO;
-import com.ecommerce.dto.UserDTO;
+import com.ecommerce.model.dto.ShowUserDTO;
+import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
+import com.ecommerce.model.dto.UserRegisterDTO;
 import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,8 +53,9 @@ public class UserService {
         return userMapper.usertoShowDTO(userRepository.save(user1));
     }
 
-    public UserDTO save(UserDTO user) throws Error {
-        User userOptional = userRepository.findByName(user.getName());
+    public UserDTO save(UserRegisterDTO user) throws Error {
+        User userOptional = userRepository.findByName(user.getUsername());
+        user.setRole(2L);
         if (userOptional != null) {
             throw new Error("User already exists");
         }

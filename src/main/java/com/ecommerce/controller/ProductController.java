@@ -1,7 +1,7 @@
 package com.ecommerce.controller;
 
 
-import com.ecommerce.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;

@@ -1,8 +1,8 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dto.SellerProductAddDTO;
-import com.ecommerce.dto.ShowSellProductDTO;
-import com.ecommerce.dto.ShowSellerDTO;
+import com.ecommerce.model.dto.SellerProductAddDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ShowSellerDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.SellProductMapper;
 import com.ecommerce.mapper.SellerMapper;
@@ -74,6 +74,7 @@ public class SellerService {
     }
 
     public Boolean deleteSeller(Long id) throws Error {
+        System.out.println("Seller id: " + id);
         Seller seller = findSellerById(id);
         sellerRepository.delete(seller);
         return true;

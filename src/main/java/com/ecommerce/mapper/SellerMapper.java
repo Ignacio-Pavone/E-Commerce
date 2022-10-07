@@ -1,6 +1,6 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.ShowSellerDTO;
+import com.ecommerce.model.dto.ShowSellerDTO;
 import com.ecommerce.model.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

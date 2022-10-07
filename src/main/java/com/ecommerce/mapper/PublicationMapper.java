@@ -1,7 +1,8 @@
 package com.ecommerce.mapper;
 
-import com.ecommerce.dto.PublicationDTO;
+import com.ecommerce.model.dto.PublicationDTO;
 import com.ecommerce.model.Publication;
+import com.ecommerce.model.SellerCustomization;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,9 +12,15 @@ import java.util.List;
 public class PublicationMapper {
     public PublicationDTO toPublicationDTO(Publication publication) {
         PublicationDTO publicationDTO = new PublicationDTO();
-        publicationDTO.setId(publication.getId());
-        publicationDTO.setPublicationName(publication.getPublicationName());
+        publicationDTO.setIdPublication(publication.getId());
         publicationDTO.setIdSellProduct(publication.getId_sellproduct());
+        publicationDTO.setPublicationName(publication.getPublicationName());
+        for (SellerCustomization sellerCustomization : publication.getSellProduct().getSellerCustomizations()) {
+            if (publication.getSellProduct().getSellerCustomizations().indexOf(sellerCustomization) == 0) {
+                publicationDTO.setSellerCustomization(sellerCustomization.getDescription());
+            }
+        }
+
         publicationDTO.setProductName(publication.getSellProduct().getProduct().getName());
         publicationDTO.setStock(publication.getStock());
         publicationDTO.setPrice(publication.getPrice());

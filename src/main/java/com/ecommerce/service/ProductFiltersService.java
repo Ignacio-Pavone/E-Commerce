@@ -1,6 +1,6 @@
 package com.ecommerce.service;
-import com.ecommerce.dto.ProductFilterDTO;
-import com.ecommerce.dto.ShowSellProductDTO;
+import com.ecommerce.model.dto.ProductFilterDTO;
+import com.ecommerce.model.dto.ShowSellProductDTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

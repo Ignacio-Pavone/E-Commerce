@@ -1,4 +1,4 @@
-package com.ecommerce.dto;
+package com.ecommerce.model.dto;
 
 import com.ecommerce.model.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;

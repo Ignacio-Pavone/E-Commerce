@@ -1,11 +1,10 @@
 package com.ecommerce.controller;
 
-import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
-import com.ecommerce.model.Seller;
-import com.ecommerce.service.SellerService;
+import com.ecommerce.model.dto.ShowUserDTO;
+import com.ecommerce.model.dto.UserDTO;
+import com.ecommerce.model.dto.UserRegisterDTO;
 import com.ecommerce.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +42,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserDTO user) throws Error {
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserRegisterDTO user) throws Error {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole_id(2L);
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
