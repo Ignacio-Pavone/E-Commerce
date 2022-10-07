@@ -1,4 +1,4 @@
-package com.ecommerce.exception.repository;
+package com.ecommerce.repository;
 
 import com.ecommerce.model.SellerCustomization;
 import org.springframework.data.jpa.repository.JpaRepository;

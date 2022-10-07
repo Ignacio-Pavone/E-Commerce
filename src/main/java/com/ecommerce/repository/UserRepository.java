@@ -1,4 +1,4 @@
-package com.ecommerce.exception.repository;
+package com.ecommerce.repository;
 
 
 import com.ecommerce.dto.UserDTO;
@@ -15,8 +15,9 @@ import java.util.function.Function;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
+
+    User findByName(String name);
     List<User> findAll();
-    Optional<User> findByName(String name);
 
     List<User> findAllByName(String name);
 

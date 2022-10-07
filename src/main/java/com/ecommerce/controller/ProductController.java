@@ -5,7 +5,7 @@ import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
-import com.ecommerce.exception.repository.SellProductRepository;
+import com.ecommerce.repository.SellProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +63,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.getByFilters(name, order), HttpStatus.OK);
     }
 
-    @PatchMapping("/setCustomization/{id_producto}")
+    @PatchMapping("/setBaseCustomization/{id_producto}")
     public ResponseEntity<String> setCustomization(@PathVariable("id_producto") Long id_producto, @RequestBody Product product) throws Error {
         if (productService.setCustomization(id_producto, product.getCustom_id())) {
             return new ResponseEntity<>("Customization set", HttpStatus.OK);

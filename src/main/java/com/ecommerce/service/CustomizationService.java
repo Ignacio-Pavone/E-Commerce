@@ -1,7 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.BaseCustomization;
-import com.ecommerce.exception.repository.CustomizationRepository;
+import com.ecommerce.repository.CustomizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

@@ -4,10 +4,10 @@ import com.ecommerce.dto.SellerProductAddDTO;
 import com.ecommerce.dto.ShowSellProductDTO;
 import com.ecommerce.dto.ShowSellerDTO;
 import com.ecommerce.exception.Error;
-import com.ecommerce.exception.repository.*;
 import com.ecommerce.mapper.SellProductMapper;
 import com.ecommerce.mapper.SellerMapper;
 import com.ecommerce.model.*;
+
 import com.ecommerce.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

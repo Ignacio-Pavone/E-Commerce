@@ -2,10 +2,12 @@ package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +29,8 @@ public class User {
     @JsonIgnoreProperties("role_id")
     @JsonBackReference
     private Long role_id;
+
+
     @Override
     public String toString() {
         return "User{" +

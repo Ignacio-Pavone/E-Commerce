@@ -5,7 +5,7 @@ import com.ecommerce.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
-import com.ecommerce.exception.repository.UserRepository;
+import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +53,8 @@ public class UserService {
     }
 
     public UserDTO save(UserDTO user) throws Error {
-        Optional<User> userOptional = userRepository.findByName(user.getName());
-        if (userOptional.isPresent()) {
+        User userOptional = userRepository.findByName(user.getName());
+        if (userOptional != null) {
             throw new Error("User already exists");
         }
         User nuevo = userRepository.save(userMapper.DTOtoUser(user));
@@ -76,15 +76,9 @@ public class UserService {
         return false;
     }
 
-    public ShowUserDTO login(String nombre, String password) {
-        List<User> users = userRepository.findAllByName(nombre);
-        System.out.println(users);
-        for (User user : users) {
-            if (user.getName().equals(nombre))
-                if (user.getPassword().equals(password))
-                    return userMapper.usertoShowDTO(user);
-        }
-        return null;
+    public User findByName(String name) {
+        User nuevo = userRepository.findByName(name);
+        return nuevo;
     }
 
 

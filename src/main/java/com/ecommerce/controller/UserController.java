@@ -5,9 +5,11 @@ import com.ecommerce.exception.Error;
 import com.ecommerce.model.Seller;
 import com.ecommerce.service.SellerService;
 import com.ecommerce.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +20,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("{id}")
     public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws Error {
@@ -40,6 +44,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody @Valid UserDTO user) throws Error {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole_id(2L);
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
@@ -56,19 +62,6 @@ public class UserController {
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
         return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);
     }
-
-    @GetMapping("/login")
-    public ResponseEntity<String> login (@RequestParam(value = "name", required = false) String name, @RequestParam(value = "password", required = false) String password) throws Error {
-        if (name == null || password == null) {
-            return new ResponseEntity<>("You Must fill the parameters", HttpStatus.UNAUTHORIZED);
-        } else if (userService.login(name, password) != null) {
-            return new ResponseEntity<>("Welcome " + name, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Name or password incorrect",HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-
 }
 
 

@@ -4,9 +4,9 @@ import com.ecommerce.dto.*;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.*;
 import com.ecommerce.model.*;
-import com.ecommerce.exception.repository.SellProductRepository;
-import com.ecommerce.exception.repository.ShoppingCartRepository;
-import com.ecommerce.exception.repository.StoreRepository;
+import com.ecommerce.repository.SellProductRepository;
+import com.ecommerce.repository.ShoppingCartRepository;
+import com.ecommerce.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

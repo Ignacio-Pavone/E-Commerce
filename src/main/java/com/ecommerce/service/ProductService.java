@@ -6,8 +6,8 @@ import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.SellProductMapper;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
-import com.ecommerce.exception.repository.ProductRepository;
-import com.ecommerce.exception.repository.SellProductRepository;
+import com.ecommerce.repository.ProductRepository;
+import com.ecommerce.repository.SellProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
