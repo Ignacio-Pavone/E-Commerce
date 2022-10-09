@@ -21,10 +21,10 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_shopping_cart;
-    @ManyToMany(cascade = CascadeType.DETACH)
-    @JoinTable(name = "shopping_cart_sell_product",
-            joinColumns = @JoinColumn(name = "id_shopping_cart"),
-            inverseJoinColumns = @JoinColumn(name = "id_sell_product"))
+    @ManyToMany(cascade = CascadeType.DETACH) //todo raro esto
+    @JoinTable(name = "shopping_cart_item",
+            joinColumns = @JoinColumn(name = "shopping_cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> productList = new ArrayList<>();
     private Integer totalProducts = 0;
     private Double totalPrice = 0.0;

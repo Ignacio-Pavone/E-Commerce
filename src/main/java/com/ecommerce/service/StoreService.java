@@ -166,6 +166,7 @@ public class StoreService {
         Item item = new Item(nuevo, quantity);
         List<Item> items = new ArrayList<>();
         items.add(item);
+        itemRepository.save(item);
         ShoppingCart shoppingCart = new ShoppingCart(items, items.size(), getTotalPriceList(items, quantity), idStore, LocalDate.now());
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
@@ -209,8 +210,15 @@ public class StoreService {
         map.put("Total Products", shoppingCart.getTotalProducts().toString());
         // map.put("Products", shoppingCart.getProductList().toString());
         map.put("Date", shoppingCart.getBuyDate().toString());
+        //TODO PROBLEMA PARA ELIMINAR ITEMS DE LA DB
+        /*
+        for (Item item : shoppingCart.getProductList()) {
+           itemRepository.delete(item);
+        }
+*/
+
         shoppingCartRepository.delete(shoppingCart);
-        return map.toString() + "Checkout done - Thanks for your purchase";
+        return map.toString() + " Checkout done - Thanks for your purchase";
     }
 
     public String deleteProductFromShoppingCart(Long idShopping, Long idProduct) throws Error {
