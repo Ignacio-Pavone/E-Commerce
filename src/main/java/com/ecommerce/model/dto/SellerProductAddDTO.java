@@ -8,5 +8,5 @@ import lombok.Setter;
 public class SellerProductAddDTO {
     private String name;
     private Double price;
-    private String description;
+    private String seller_customization;
 }

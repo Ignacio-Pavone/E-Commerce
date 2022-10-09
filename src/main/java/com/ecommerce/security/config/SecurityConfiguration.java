@@ -76,11 +76,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/customizations/base").hasAuthority("manager")
 
                 //SHOPPING CART
-                .antMatchers(HttpMethod.POST, "/shoppingcart").hasAuthority("buyer")
-                .antMatchers(HttpMethod.GET, "/shoppingcart").hasAuthority("buyer")
-                .antMatchers(HttpMethod.DELETE, "/shoppingcart").hasAuthority("buyer")
-                .antMatchers(HttpMethod.PATCH, "/shoppingcart/addproduct").hasAuthority("buyer")
-
+                .antMatchers( HttpMethod.POST, "/shoppingcart").hasAuthority("manager")
+                .antMatchers(HttpMethod.GET, "/shoppingcart").hasAuthority("manager")
+                .antMatchers(HttpMethod.DELETE, "/shoppingcart").hasAuthority("manager")
+                .antMatchers(HttpMethod.PATCH, "/shoppingcart/addproduct").hasAuthority("manager")
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

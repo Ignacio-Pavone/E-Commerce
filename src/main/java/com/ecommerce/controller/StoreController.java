@@ -29,23 +29,23 @@ public class StoreController {
     }
 
     @PostMapping("/create/{id}")
-    public ResponseEntity<Store> createStore(@PathVariable("id") Long id) throws Error {
+    public ResponseEntity<StoreDTO> createStore(@PathVariable("id") Long id) throws Error {
         return new ResponseEntity<>(storeService.createStore(id), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Store> deleteStore(@PathVariable("id") Long id) throws Error {
+    public ResponseEntity<StoreDTO> deleteStore(@PathVariable("id") Long id) throws Error {
         return new ResponseEntity<>(storeService.deleteStore(id), HttpStatus.OK);
     }
 
     @PostMapping("/addpayment/{id}")
-    public ResponseEntity<Store> addPayment(@PathVariable("id") Long id, @RequestBody String payment) throws Error {
+    public ResponseEntity<StoreDTO> addPayment(@PathVariable("id") Long id, @RequestBody String payment) throws Error {
         PaymentConverter paymentConverter = new PaymentConverter();
         return new ResponseEntity<>(storeService.addPaymentMethod(id, paymentConverter.convertToEntityAttribute(payment.toLowerCase())), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/deletepayment/{id}")
-    public ResponseEntity<Store> deletePayment(@PathVariable("id") Long id, @RequestBody String payment) throws Error {
+    public ResponseEntity<StoreDTO> deletePayment(@PathVariable("id") Long id, @RequestBody String payment) throws Error {
         PaymentConverter paymentConverter = new PaymentConverter();
         return new ResponseEntity<>(storeService.removePaymentMethod(id, paymentConverter.convertToEntityAttribute(payment.toLowerCase())), HttpStatus.ACCEPTED);
     }

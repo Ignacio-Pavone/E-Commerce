@@ -19,10 +19,10 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String publicationName;
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_sellproduct",nullable = true,insertable=false, updatable=false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private SellProduct sellProduct;
-
     @JsonProperty("id_sellproduct")
     @JsonIgnoreProperties("id_sellproduct")
     @JsonBackReference
@@ -34,14 +34,6 @@ public class Publication {
     @JsonIgnoreProperties("store_id")
     @JsonBackReference
     private Long store_id;
-
-    public void activatePublication() {
-        this.isActive = true;
-    }
-    public void deactivatePublication() {
-        this.isActive = false;
-    }
-
 
     @Override
     public String toString() {

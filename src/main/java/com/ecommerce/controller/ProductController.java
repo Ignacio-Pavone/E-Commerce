@@ -1,11 +1,13 @@
 package com.ecommerce.controller;
 
 
+import com.ecommerce.model.BaseCustomization;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
 import com.ecommerce.repository.SellProductRepository;
+import com.ecommerce.service.CustomizationService;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private SellProductRepository sellProductRepository;
+    @Autowired
+    private CustomizationService customizationService;
 
     @GetMapping()
     public ResponseEntity<List<Product>> getAll() {
@@ -63,7 +67,23 @@ public class ProductController {
         return new ResponseEntity<>(productService.getByFilters(name, order), HttpStatus.OK);
     }
 
-    @PatchMapping("/setBaseCustomization/{id_producto}")
+    @PostMapping("/customizations/base")
+    public ResponseEntity<BaseCustomization> createCustomization(@RequestBody BaseCustomization bCustomizationController) {
+        return ResponseEntity.ok(customizationService.createCustomization(bCustomizationController));
+    }
+
+    @GetMapping("/customizations/base")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(customizationService.findAll());
+    }
+
+    @DeleteMapping("/customizations/base/{id}")
+    public ResponseEntity<?> deleteCustomization(@PathVariable Long id) {
+        customizationService.deleteCustomization(id);
+        return ResponseEntity.ok("Customization deleted");
+    }
+
+    @PatchMapping("/customizations/setBaseCustomization/{id_producto}")
     public ResponseEntity<String> setCustomization(@PathVariable("id_producto") Long id_producto, @RequestBody Product product) throws Error {
         if (productService.setCustomization(id_producto, product.getCustom_id())) {
             return new ResponseEntity<>("Customization set", HttpStatus.OK);

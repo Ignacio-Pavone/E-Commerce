@@ -15,7 +15,9 @@ public class StoreMapper {
             storeDTO.setIdStore(store.getIdStore());
             storeDTO.setSeller_id(store.getUser().getSeller_id());
             storeDTO.setSellername(store.getUser().getUser().getName());
-            storeDTO.setPublications(publicationMapper.toPublicationDTO(store.getPublications()));
+            if (store.getPublications() != null) {
+                storeDTO.setPublications(publicationMapper.toPublicationDTO(store.getPublications()));
+            }
             storeDTO.setPaymentMethods(store.getPaymentMethods());
             return storeDTO;
         }

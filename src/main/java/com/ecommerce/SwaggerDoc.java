@@ -21,6 +21,7 @@ public class SwaggerDoc {
                 .apis(RequestHandlerSelectors.basePackage("com.ecommerce.controller"))
                 .paths(PathSelectors.regex("/.*"))
                 .build().apiInfo(apiInfoMetaData());
+
     }
 
     private ApiInfo apiInfoMetaData() {

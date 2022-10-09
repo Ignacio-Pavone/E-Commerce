@@ -21,7 +21,7 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_shopping_cart;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "shopping_cart_sell_product",
             joinColumns = @JoinColumn(name = "id_shopping_cart"),
             inverseJoinColumns = @JoinColumn(name = "id_sell_product"))

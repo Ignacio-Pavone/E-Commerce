@@ -6,9 +6,7 @@ import com.ecommerce.model.*;
 import com.ecommerce.model.dto.PublicationDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.model.dto.StoreDTO;
-import com.ecommerce.repository.SellProductRepository;
-import com.ecommerce.repository.ShoppingCartRepository;
-import com.ecommerce.repository.StoreRepository;
+import com.ecommerce.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +35,10 @@ public class StoreService {
     private SellProductRepository sellProductRepository;
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
-
     @Autowired
-    private ShoppingCartMapper shoppingCartMapper;
+    private ItemRepository itemRepository;
+    @Autowired
+    private PublicationRepository publicationRepository;
 
 
     public List<StoreDTO> findall() {
@@ -53,10 +52,11 @@ public class StoreService {
 
     public StoreDTO findbyId(Long id) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
+        publicationRepository.deleteAll(store.getPublications());
         return storeMapper.storeToDTO(store);
     }
 
-    public Store createStore(Long id) throws Error {
+    public StoreDTO createStore(Long id) throws Error {
         Store store = new Store();
         Seller seller = sellerService.findSellerById(id);
         store.setUser(seller);
@@ -65,15 +65,18 @@ public class StoreService {
                 throw new Error("Store already exists");
             }
         }
-        return storeRepository.save(store);
+        StoreDTO retorno = storeMapper.storeToDTO(storeRepository.save(store));
+        return retorno;
     }
 
     public PublicationDTO addPublication(Long id, PublicationDTO publication) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         if (store == null) {
             throw new Error("Store not found");
+        }else if (store.getPaymentMethods().isEmpty()) {
+            throw new Error("Store without payment methods");
         }
-        List<ShowSellProductDTO> products = productService.findAllsellProducts(); //TODO VERIFICAR QUE EL PRODUCTO SEA DEL USUARIO
+        List<ShowSellProductDTO> products = productService.findAllsellProducts();
         for (ShowSellProductDTO product : products) {
             if (product.getId().equals(publication.getIdSellProduct())) {
                 Publication publication1 = new Publication();
@@ -92,13 +95,15 @@ public class StoreService {
         throw new Error("Product not found");
     }
 
-    public Store deleteStore(Long id) throws Error {
+    public StoreDTO deleteStore(Long id) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
+        StoreDTO retorno = storeMapper.storeToDTO(store);
         storeRepository.delete(store);
-        return store;
+        return retorno;
+
     }
 
-    public Store addPaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
+    public StoreDTO addPaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
             if (paymentMethod1.equals(paymentMethod)) {
@@ -106,15 +111,18 @@ public class StoreService {
             }
         }
         store.getPaymentMethods().add(paymentMethod);
-        return storeRepository.save(store);
+        StoreDTO retorno = storeMapper.storeToDTO(storeRepository.save(store));
+        return retorno;
     }
 
-    public Store removePaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
+    public StoreDTO removePaymentMethod(Long id, PaymentMethod paymentMethod) throws Error {
         Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
         for (PaymentMethod paymentMethod1 : store.getPaymentMethods()) {
             if (paymentMethod1.equals(paymentMethod)) {
                 store.getPaymentMethods().remove(paymentMethod);
-                return storeRepository.save(store);
+                StoreDTO retorno = storeMapper.storeToDTO(storeRepository.save(store));
+                storeRepository.save(store);
+                 return retorno;
             }
         }
         throw new Error("Payment method not found");
@@ -158,7 +166,7 @@ public class StoreService {
         Item item = new Item(nuevo, quantity);
         List<Item> items = new ArrayList<>();
         items.add(item);
-        ShoppingCart shoppingCart = new ShoppingCart(items, items.size(),getTotalPriceList(items,quantity),idStore,LocalDate.now());
+        ShoppingCart shoppingCart = new ShoppingCart(items, items.size(), getTotalPriceList(items, quantity), idStore, LocalDate.now());
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
 
@@ -184,10 +192,10 @@ public class StoreService {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
         SellProduct nuevo = storeFindProduct(idStore, idProduct);
         if (shoppingCart.getStore().equals(idStore)) {
-            Item item = new Item(nuevo,quantity);
+            Item item = new Item(nuevo, quantity);
             shoppingCart.getProductList().add(item);
             shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
-            shoppingCart.setTotalPrice((nuevo.getSellingPrice() * quantity)+ shoppingCart.getTotalPrice());
+            shoppingCart.setTotalPrice((nuevo.getSellingPrice() * quantity) + shoppingCart.getTotalPrice());
             shoppingCartRepository.save(shoppingCart);
             return "Product added to shopping cart";
         }
@@ -199,13 +207,8 @@ public class StoreService {
         HashMap<String, String> map = new HashMap<>();
         map.put("Total Price", shoppingCart.getTotalPrice().toString());
         map.put("Total Products", shoppingCart.getTotalProducts().toString());
-       // map.put("Products", shoppingCart.getProductList().toString());
+        // map.put("Products", shoppingCart.getProductList().toString());
         map.put("Date", shoppingCart.getBuyDate().toString());
-        for (Iterator it = shoppingCart.getProductList().iterator(); it.hasNext(); ) {
-            Item item = (Item) it.next();
-            it.remove();
-        }
-
         shoppingCartRepository.delete(shoppingCart);
         return map.toString() + "Checkout done - Thanks for your purchase";
     }

@@ -24,7 +24,7 @@ public class Store {
     @OneToOne
     @JoinColumn(name = "seller_id")
     private Seller user;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //todo SOLUCIONAR ERRRO AL ELIMINAR STORE
     @JoinColumn(name = "store_id")
     private List<Publication> publications;
     @Column(name = "modos_de_pago")

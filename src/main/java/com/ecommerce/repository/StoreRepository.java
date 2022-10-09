@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findAll();
+    Store deleteStoreByIdStore(Long idStore);
 }
