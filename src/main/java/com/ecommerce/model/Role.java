@@ -31,6 +31,10 @@ public class Role {
     )
     private List<Permission> permissions;
 
+    public Role(RoleType role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Role{" +

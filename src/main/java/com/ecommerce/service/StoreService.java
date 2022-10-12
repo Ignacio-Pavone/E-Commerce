@@ -7,9 +7,11 @@ import com.ecommerce.model.dto.PublicationDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.model.dto.StoreDTO;
 import com.ecommerce.repository.*;
+import com.ecommerce.utils.InvoicePDFExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,6 +194,7 @@ public class StoreService {
     public String addMoreProductstoShopping(Long idStore, Long idShopping, Long idProduct, Integer quantity) throws Error {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
         SellProduct nuevo = storeFindProduct(idStore, idProduct);
+        System.out.println(nuevo);
         if (shoppingCart.getStore().equals(idStore)) {
             Item item = new Item(nuevo, quantity);
             shoppingCart.getProductList().add(item);
@@ -205,20 +208,29 @@ public class StoreService {
 
     public String checkoOut(Long id) throws Error {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Total Price", shoppingCart.getTotalPrice().toString());
-        map.put("Total Products", shoppingCart.getTotalProducts().toString());
-        // map.put("Products", shoppingCart.getProductList().toString());
-        map.put("Date", shoppingCart.getBuyDate().toString());
-        //TODO PROBLEMA PARA ELIMINAR ITEMS DE LA DB
-        /*
-        for (Item item : shoppingCart.getProductList()) {
-           itemRepository.delete(item);
-        }
-*/
+        Store findStore = storeRepository.findById(shoppingCart.getStore()).orElseThrow(() -> new Error("Store not found"));
 
-        shoppingCartRepository.delete(shoppingCart);
-        return map.toString() + " Checkout done - Thanks for your purchase";
+        if (createInvoice(findStore.getUser().getUser().getName(),shoppingCart)) {
+            //TODO PROBLEMA PARA ELIMINAR ITEMS DE LA DB
+            shoppingCartRepository.delete(shoppingCart);
+            return "Checkout completed";
+        }else{
+            throw new Error("Error creating invoice");
+        }
+
+    }
+
+    public boolean createInvoice (String sellername, ShoppingCart shoppingCart) throws Error {
+        Invoice invoice = new Invoice(shoppingCart.getId_shopping_cart(),sellername, shoppingCart.getTotalProducts(), shoppingCart.getBuyDate(), shoppingCart.getTotalPrice(), shoppingCart.getProductList());
+        InvoicePDFExporter invoicePDFExporter = new InvoicePDFExporter(invoice);
+        Boolean flag = false;
+        try {
+            invoicePDFExporter.export();
+            flag = true;
+            return flag;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String deleteProductFromShoppingCart(Long idShopping, Long idProduct) throws Error {

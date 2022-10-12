@@ -10,3 +10,4 @@ Tecnologies used
 - MySQL
 - JWT
 - BCrypt
+- OpenPDF

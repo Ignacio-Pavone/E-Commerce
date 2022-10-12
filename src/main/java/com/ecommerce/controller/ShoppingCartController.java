@@ -1,14 +1,17 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.model.Invoice;
 import com.ecommerce.model.dto.ShoppingCartDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.ShoppingCartMapper;
 import com.ecommerce.service.StoreService;
+import com.ecommerce.utils.InvoicePDFExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/shoppingcart")
@@ -36,7 +39,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/{id}/checkout")
-    public ResponseEntity<String> checkout(@PathVariable("id") Long id) throws Error {
+    public ResponseEntity<String> checkout(@PathVariable("id") Long id) throws Error, IOException {
         return new ResponseEntity<>(storeService.checkoOut(id), HttpStatus.OK);
     }
 

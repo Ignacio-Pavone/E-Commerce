@@ -35,7 +35,7 @@ public class SellerController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Seller> saveSeller(@RequestBody Seller seller) throws Error {
+    public ResponseEntity<String> saveSeller(@RequestBody Seller seller) throws Error {
         return new ResponseEntity<>(sellerService.saveSeller(seller), HttpStatus.CREATED);
     }
 

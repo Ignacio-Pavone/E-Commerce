@@ -40,10 +40,14 @@ public class SellerService {
         return sellerMapper.toShowSellerDTO(sellerRepository.findById(id).orElseThrow(() -> new Error("Seller not found")));
     }
 
-    public Seller saveSeller(Seller seller) throws Error {
+    public String saveSeller(Seller seller) throws Error {
         User user = userRepository.findById(seller.getUser_id()).orElseThrow(() -> new Error("User not found"));
-        if (user.getRole_id().equals(1L)) {
-            return sellerRepository.save(seller);
+        Role role = new Role(RoleType.seller);
+        System.out.println(role);
+        System.out.println(user.getRole());
+        if (user.getRole().getRole().equals(role.getRole())) {
+             sellerRepository.save(seller);
+             return "Seller added";
         }
         throw new Error("User is not a seller");
     }
