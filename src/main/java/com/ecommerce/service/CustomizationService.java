@@ -22,8 +22,11 @@ public class CustomizationService {
     }
 
     public boolean deleteCustomization(Long id) {
-        customizationRepository.deleteById(id);
-        return true;
+        if (customizationRepository.existsById(id)) {
+            customizationRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }

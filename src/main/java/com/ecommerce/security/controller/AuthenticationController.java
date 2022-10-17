@@ -5,6 +5,7 @@ import com.ecommerce.security.model.AuthenticationDTOResponse;
 import com.ecommerce.security.service.IJwtService;
 
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+@Log4j2
 @RestController
 public class AuthenticationController {
     @Autowired
@@ -33,9 +34,12 @@ public class AuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationDTORequest.getName(), authenticationDTORequest.getPassword()));
         }catch (BadCredentialsException e) {
-            throw new Exception("Incorrect", e);
+            throw new Exception("Incorrect User or Password", e);
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDTORequest.getName());
+        if (userDetails != null) {
+            log.info("Usuario autenticado: " + userDetails.getUsername());
+        }
         final String jwt = jwtService.generateToken(userDetails);
         return ResponseEntity.ok(new AuthenticationDTOResponse((jwt)));
     }

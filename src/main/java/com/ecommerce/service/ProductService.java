@@ -1,11 +1,13 @@
 package com.ecommerce.service;
 
+import com.ecommerce.model.BaseCustomization;
 import com.ecommerce.model.dto.ProductFilterDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.SellProductMapper;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.SellProduct;
+import com.ecommerce.repository.CustomizationRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.SellProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductService {
@@ -24,6 +27,8 @@ public class ProductService {
     private SellProductMapper sellproductMapper;
     @Autowired
     private ProductFiltersService productFiltersService;
+    @Autowired
+    private CustomizationRepository customizationRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -56,9 +61,15 @@ public class ProductService {
         if (product == null) {
             throw new Error("Product not found");
         }
-        product.setCustom_id(id_custom);
-        productRepository.save(product);
-        return true;
+        Optional<BaseCustomization> customization = customizationRepository.findById(id_custom);
+        if (customization.isPresent()) {
+            product.setCustom_id(id_custom);
+            productRepository.save(product);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     public List<ShowSellProductDTO> findAllsellProducts() {

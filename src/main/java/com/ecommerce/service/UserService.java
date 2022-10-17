@@ -1,11 +1,13 @@
 package com.ecommerce.service;
 
+import com.ecommerce.model.Role;
 import com.ecommerce.model.dto.ShowUserDTO;
 import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.UserMapper;
 import com.ecommerce.model.User;
 import com.ecommerce.model.dto.UserRegisterDTO;
+import com.ecommerce.repository.RoleRepository;
 import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     public User findById(Long characterId) throws Error {
@@ -65,8 +70,13 @@ public class UserService {
 
     public UserDTO setRole(Long id, Long role_id) throws Error {
         User user = findById(id);
-        user.setRole_id(role_id);
-        return userMapper.usertoDTO(userRepository.save(user));
+        Optional<Role>  role = roleRepository.findById(role_id);
+        if (role.isPresent()) {
+            user.setRole_id(role_id);
+            return userMapper.usertoDTO(userRepository.save(user));
+        }
+        return null;
+
     }
 
     public boolean deleteUser(Long id) {

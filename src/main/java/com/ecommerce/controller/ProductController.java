@@ -79,8 +79,11 @@ public class ProductController {
 
     @DeleteMapping("/customizations/base/{id}")
     public ResponseEntity<?> deleteCustomization(@PathVariable Long id) {
-        customizationService.deleteCustomization(id);
-        return ResponseEntity.ok("Customization deleted");
+        if (customizationService.deleteCustomization(id)) {
+            return ResponseEntity.ok().build();
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping("/customizations/setBaseCustomization/{id_producto}")
@@ -88,7 +91,7 @@ public class ProductController {
         if (productService.setCustomization(id_producto, product.getCustom_id())) {
             return new ResponseEntity<>("Customization set", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Customization not set", HttpStatus.NOT_FOUND);
         }
     }
 

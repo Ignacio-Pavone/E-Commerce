@@ -23,12 +23,16 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("{id}")
-    public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) throws Error {
-        return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.FOUND);
+    public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(userService.findByIdShowUser(id), HttpStatus.FOUND);
+        } catch (Error e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping()
-    public ResponseEntity<List<ShowUserDTO>> getAll (@RequestParam(value = "name", required = false) String name) throws Error {
+    public ResponseEntity<List<ShowUserDTO>> getAll(@RequestParam(value = "name", required = false) String name) throws Error {
         if (name == null || userService.findByNameShowUserList(name).isEmpty()) {
             return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
         } else {
@@ -36,15 +40,23 @@ public class UserController {
         }
     }
 
-    @PutMapping ("{id}")
-    public ResponseEntity<ShowUserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO user) throws Error {
-        return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
+    @PutMapping("{id}")
+    public ResponseEntity<ShowUserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO user) {
+        try {
+            return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
+        } catch (Error e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserRegisterDTO user) throws Error {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserRegisterDTO user) {
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        } catch (Error e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("{id}")
@@ -58,7 +70,11 @@ public class UserController {
 
     @PatchMapping("/setrole/{id}")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
-        return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.ACCEPTED);
+        if (userService.setRole(id, user.getRole_id()) != null) {
+            return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
 

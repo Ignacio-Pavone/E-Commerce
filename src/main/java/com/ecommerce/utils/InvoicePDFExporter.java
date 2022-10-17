@@ -51,6 +51,7 @@ public class InvoicePDFExporter {
     }
 
     private void writeTableData(PdfPTable table) {
+
         table.addCell(String.valueOf(this.invoice.getId()));
         table.addCell(String.valueOf(invoice.getSellername()));
         table.addCell(String.valueOf(this.invoice.getTotalProducts()));
@@ -74,19 +75,14 @@ public class InvoicePDFExporter {
         font.setColor(Color.RED);
 
         Paragraph p = new Paragraph("Invoice Softtek", font);
-
         p.setAlignment(Paragraph.ALIGN_CENTER);
-
         document.add(p);
-
         PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[]{1f,2.0f, 1f, 3.0f, 1.5f, 3.5f});
+        table.setWidths(new float[]{1f, 2.0f, 1f, 3.0f, 1.5f, 3.5f});
         table.setSpacingBefore(10);
-
         writeTableHeader(table);
         writeTableData(table);
-
         document.add(table);
         document.close();
 

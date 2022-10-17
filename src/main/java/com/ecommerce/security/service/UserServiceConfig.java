@@ -24,11 +24,10 @@ public class UserServiceConfig implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        log.info("Consultando USUARIO " + name + " en base de datos");
+        log.info("Buscando usuario: " + name);
         User usuario = repository.findByName(name);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(usuario.getRole().getRole().toString()));
-        log.info("Usuario autenticado: " + name);
         return new org.springframework.security.core.userdetails.User(usuario.getName(), usuario.getPassword(), authorities);
     }
 }
