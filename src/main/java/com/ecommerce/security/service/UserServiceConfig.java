@@ -1,9 +1,7 @@
 package com.ecommerce.security.service;
 import com.ecommerce.model.User;
-import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

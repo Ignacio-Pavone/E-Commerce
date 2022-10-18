@@ -51,13 +51,10 @@ public class ProductController {
         return new ResponseEntity<>(productService.findAllsellProducts(), HttpStatus.OK);
     }
 
-
     @GetMapping("/sellproducts")
     public ResponseEntity<List<SellProduct>> getSellProducts() {
         return new ResponseEntity<>(sellProductRepository.findAll(), HttpStatus.OK);
     }
-
-
     @GetMapping("/filters")
     //filters?order=DESC/ASC&name=nombre
     //filters?name=nombre

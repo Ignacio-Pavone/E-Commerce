@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.Role;
+import com.ecommerce.model.RoleType;
 import com.ecommerce.model.dto.ShowUserDTO;
 import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.exception.Error;
@@ -22,7 +23,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private RoleRepository roleRepository;
 
@@ -92,6 +92,14 @@ public class UserService {
         User nuevo = userRepository.findByName(name);
         return nuevo;
     }
-
-
+    public boolean addRole(RoleType rol) {
+        Role role = new Role();
+        role.setRole(rol);
+        Optional<Role> roleOptional = roleRepository.findByRole(rol);
+        if (!roleOptional.isPresent()) {
+            roleRepository.save(role);
+            return true;
+        }
+        return false;
+    }
 }

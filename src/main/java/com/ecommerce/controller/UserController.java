@@ -1,6 +1,8 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.converters.RoleConverter;
 import com.ecommerce.exception.Error;
+import com.ecommerce.model.RoleType;
 import com.ecommerce.model.dto.ShowUserDTO;
 import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.model.dto.UserRegisterDTO;
@@ -74,6 +76,16 @@ public class UserController {
             return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/role")
+    public ResponseEntity<String> addRole(@RequestBody String rol) throws Error {
+        RoleConverter roleConverter = new RoleConverter();
+        if (userService.addRole(roleConverter.convertToEntityAttribute(rol))) {
+            return new ResponseEntity<>("Role ADDED", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Role is present or not correct", HttpStatus.BAD_REQUEST);
         }
     }
 }
