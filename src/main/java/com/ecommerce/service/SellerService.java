@@ -43,8 +43,6 @@ public class SellerService {
     public String saveSeller(Seller seller) throws Error {
         User user = userRepository.findById(seller.getUser_id()).orElseThrow(() -> new Error("User not found"));
         Role role = new Role(RoleType.seller);
-        System.out.println(role);
-        System.out.println(user.getRole());
         if (user.getRole().getRole().equals(role.getRole())) {
              sellerRepository.save(seller);
              return "Seller added";

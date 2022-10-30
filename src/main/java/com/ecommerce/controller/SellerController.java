@@ -35,8 +35,12 @@ public class SellerController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> saveSeller(@RequestBody Seller seller) throws Error {
-        return new ResponseEntity<>(sellerService.saveSeller(seller), HttpStatus.CREATED);
+    public ResponseEntity<String> saveSeller(@RequestBody Seller seller) {
+        try {
+            return new ResponseEntity<>(sellerService.saveSeller(seller), HttpStatus.CREATED);
+        } catch (Error e) {
+            return new ResponseEntity<>("User is not a Seller",HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("")

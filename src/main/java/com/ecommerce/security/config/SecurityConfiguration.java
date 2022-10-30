@@ -39,6 +39,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 //STORES
                 .antMatchers("/stores").permitAll()
+                .antMatchers("/products").permitAll()
+                .antMatchers("/users").permitAll()
+                .antMatchers("/seller").permitAll()
                 .antMatchers(HttpMethod.POST, "/stores/create").hasAuthority("manager")
                 .antMatchers(HttpMethod.POST, "/stores/addpayment").hasAuthority("manager")
                 .antMatchers(HttpMethod.DELETE, "/stores").hasAuthority("manager")
@@ -46,13 +49,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/stores/*").permitAll()
 
                 //USERS
+                /*
                 .antMatchers(HttpMethod.GET,"/users/").hasAuthority("manager")
                 .antMatchers(HttpMethod.DELETE,"/users/").hasAuthority("manager")
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll()
                 .antMatchers(HttpMethod.PUT, "/users/").hasAuthority("manager")
                 .antMatchers(HttpMethod.POST, "/users/").hasAuthority("manager")
-
-
+*/
                 //SWAGGER
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**").permitAll()

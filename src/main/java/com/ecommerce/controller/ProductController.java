@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 
 import com.ecommerce.model.BaseCustomization;
+import com.ecommerce.model.dto.CreateProductDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
 import com.ecommerce.model.Product;
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws Error {
+    public ResponseEntity<CreateProductDTO> createProduct(@RequestBody CreateProductDTO product) throws Error {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 

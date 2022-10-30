@@ -1,6 +1,8 @@
 package com.ecommerce.service;
 
+import com.ecommerce.mapper.CreateProductMapper;
 import com.ecommerce.model.BaseCustomization;
+import com.ecommerce.model.dto.CreateProductDTO;
 import com.ecommerce.model.dto.ProductFilterDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.exception.Error;
@@ -30,6 +32,9 @@ public class ProductService {
     @Autowired
     private CustomizationRepository customizationRepository;
 
+    @Autowired
+    private CreateProductMapper createProductMapper;
+
     public List<Product> findAll() {
         return productRepository.findAll();
     }
@@ -42,12 +47,14 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public Product createProduct(Product product) throws Error {
+    public CreateProductDTO createProduct(CreateProductDTO product) throws Error {
         Product exist = findProductByName(product.getName());
         if (exist != null) {
             throw new Error("Product already exists");
         }
-        return productRepository.save(product);
+        Product newProduct = createProductMapper.toProduct(product);
+        productRepository.save(newProduct);
+        return createProductMapper.toCreateProductDTO(newProduct);
     }
 
     public String deleteProduct(Long id) throws Error {

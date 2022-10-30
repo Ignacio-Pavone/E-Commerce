@@ -102,4 +102,9 @@ public class UserService {
         }
         return false;
     }
+
+    public List<Role> getRoles() {
+        List<Role> roles = roleRepository.findAll();
+        return roles;
+    }
 }

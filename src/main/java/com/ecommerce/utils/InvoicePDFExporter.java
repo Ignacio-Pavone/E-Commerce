@@ -1,12 +1,9 @@
 package com.ecommerce.utils;
 
 import java.awt.Color;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import javax.servlet.http.HttpServletResponse;
 
 import com.ecommerce.model.Invoice;
 import com.ecommerce.model.Item;
@@ -46,12 +43,9 @@ public class InvoicePDFExporter {
 
         cell.setPhrase(new Phrase("Products", font));
         table.addCell(cell);
-
-
     }
 
     private void writeTableData(PdfPTable table) {
-
         table.addCell(String.valueOf(this.invoice.getId()));
         table.addCell(String.valueOf(invoice.getSellername()));
         table.addCell(String.valueOf(this.invoice.getTotalProducts()));
@@ -62,18 +56,15 @@ public class InvoicePDFExporter {
             products.append(p.getSellProduct().getProduct().getName()).append(", ");
         }
         table.addCell(products.toString());
-
     }
 
     public void export() throws DocumentException, IOException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(this.invoice.getId() + "-" + this.invoice.getDate().toString() + " Invoice.pdf")));
-
         document.open();
         Font font = FontFactory.getFont(FontFactory.COURIER);
         font.setSize(18);
         font.setColor(Color.RED);
-
         Paragraph p = new Paragraph("Invoice Softtek", font);
         p.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(p);
@@ -85,7 +76,5 @@ public class InvoicePDFExporter {
         writeTableData(table);
         document.add(table);
         document.close();
-
     }
-
 }
