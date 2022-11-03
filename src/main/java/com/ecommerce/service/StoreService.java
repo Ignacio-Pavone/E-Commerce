@@ -4,6 +4,7 @@ import com.ecommerce.exception.Error;
 import com.ecommerce.mapper.*;
 import com.ecommerce.model.*;
 import com.ecommerce.model.dto.PublicationDTO;
+import com.ecommerce.model.dto.ShoppingCartProductDTO;
 import com.ecommerce.model.dto.ShowSellProductDTO;
 import com.ecommerce.model.dto.StoreDTO;
 import com.ecommerce.repository.*;
@@ -13,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class StoreService {
@@ -51,13 +49,13 @@ public class StoreService {
         }
         return storeDTOS;
     }
-
     public StoreDTO findbyId(Long id) throws Error {
-        Store store = storeRepository.findById(id).orElseThrow(() -> new Error("Store not found"));
-        publicationRepository.deleteAll(store.getPublications());
-        return storeMapper.storeToDTO(store);
+        Optional<Store> store = storeRepository.findById(id);
+           if (store.isPresent()) {
+                return storeMapper.storeToDTO(store.get());
+            }
+           return null;
     }
-
     public StoreDTO createStore(Long id) throws Error {
         Store store = new Store();
         Seller seller = sellerService.findSellerById(id);
@@ -67,8 +65,8 @@ public class StoreService {
                 throw new Error("Store already exists");
             }
         }
-        StoreDTO retorno = storeMapper.storeToDTO(storeRepository.save(store));
-        return retorno;
+        StoreDTO back = storeMapper.storeToDTO(storeRepository.save(store));
+        return back;
     }
 
     public PublicationDTO addPublication(Long id, PublicationDTO publication) throws Error {
@@ -153,23 +151,23 @@ public class StoreService {
         return shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
     }
 
-    public SellProduct storeFindProduct(Long idStore, Long idProduct) throws Error {
+    public SellProduct storeFindProduct(Long idStore, Long idPublication) throws Error {
         Store store = storeRepository.findById(idStore).orElseThrow(() -> new Error("Store not found"));
         for (Publication publication : store.getPublications()) {
-            if (publication.getId_sellproduct().equals(idProduct) && publication.getIsActive()) {
+            if (publication.getId().equals(idPublication) && publication.getIsActive()) {
                 return publication.getSellProduct();
             }
         }
         throw new Error("Product not found or not active");
     }
 
-    public String addProductToShoppingCart(Long idStore, Long idProduct, Integer quantity) throws Error {
-        SellProduct nuevo = storeFindProduct(idStore, idProduct);
-        Item item = new Item(nuevo, quantity);
+    public String addProductToShoppingCart(ShoppingCartProductDTO data) throws Error {
+        SellProduct nuevo = storeFindProduct(data.getStoreID(), data.getPublicationID());
+        Item item = new Item(nuevo, data.getQuantity());
         List<Item> items = new ArrayList<>();
         items.add(item);
         itemRepository.save(item);
-        ShoppingCart shoppingCart = new ShoppingCart(items, items.size(), getTotalPriceList(items, quantity), idStore, LocalDate.now());
+        ShoppingCart shoppingCart = new ShoppingCart(items, items.size(), getTotalPriceList(items, data.getQuantity()), data.getStoreID(), LocalDate.now());
         shoppingCartRepository.save(shoppingCart);
         return "Product added to shopping cart";
 
@@ -191,15 +189,15 @@ public class StoreService {
         return total * quantity;
     }
 
-    public String addMoreProductstoShopping(Long idStore, Long idShopping, Long idProduct, Integer quantity) throws Error {
+    public String addMoreProductstoShopping(Long idShopping,ShoppingCartProductDTO data) throws Error {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(idShopping).orElseThrow(() -> new Error("Shopping cart not found"));
-        SellProduct nuevo = storeFindProduct(idStore, idProduct);
+        SellProduct nuevo = storeFindProduct(data.getStoreID(), data.getPublicationID());
         System.out.println(nuevo);
-        if (shoppingCart.getStore().equals(idStore)) {
-            Item item = new Item(nuevo, quantity);
+        if (shoppingCart.getStore().equals(data.getStoreID())) {
+            Item item = new Item(nuevo, data.getQuantity());
             shoppingCart.getProductList().add(item);
             shoppingCart.setTotalProducts(shoppingCart.getProductList().size());
-            shoppingCart.setTotalPrice((nuevo.getSellingPrice() * quantity) + shoppingCart.getTotalPrice());
+            shoppingCart.setTotalPrice((nuevo.getSellingPrice() * data.getQuantity()) + shoppingCart.getTotalPrice());
             shoppingCartRepository.save(shoppingCart);
             return "Product added to shopping cart";
         }
@@ -209,9 +207,7 @@ public class StoreService {
     public String checkoOut(Long id) throws Error {
         ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() -> new Error("Shopping cart not found"));
         Store findStore = storeRepository.findById(shoppingCart.getStore()).orElseThrow(() -> new Error("Store not found"));
-
         if (createInvoice(findStore.getUser().getUser().getName(),shoppingCart)) {
-            //TODO PROBLEMA PARA ELIMINAR ITEMS DE LA DB
             shoppingCartRepository.delete(shoppingCart);
             return "Checkout completed";
         }else{

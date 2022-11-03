@@ -44,7 +44,6 @@ public class InvoicePDFExporter {
         cell.setPhrase(new Phrase("Products", font));
         table.addCell(cell);
     }
-
     private void writeTableData(PdfPTable table) {
         table.addCell(String.valueOf(this.invoice.getId()));
         table.addCell(String.valueOf(invoice.getSellername()));
@@ -57,7 +56,6 @@ public class InvoicePDFExporter {
         }
         table.addCell(products.toString());
     }
-
     public void export() throws DocumentException, IOException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(this.invoice.getId() + "-" + this.invoice.getDate().toString() + " Invoice.pdf")));

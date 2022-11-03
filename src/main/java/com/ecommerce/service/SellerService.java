@@ -59,9 +59,9 @@ public class SellerService {
         return showSellerDTOS;
     }
 
-    public ShowSellProductDTO buyProductbySeller(SellerProductAddDTO buff, Long SellerID, Long idProduct) throws Error {
+    public ShowSellProductDTO buyProductbySeller(SellerProductAddDTO buff, Long SellerID) throws Error {
         Seller seller = findSellerById(SellerID);
-        Product product = productRepository.findById(idProduct).orElseThrow(() -> new Error("Product not found"));
+        Product product = productRepository.findById(buff.getIdProduct()).orElseThrow(() -> new Error("Product not found"));
         SellerCustomization sellerCustom = new SellerCustomization(buff.getName() , buff.getPrice(), product.getBaseCustomizationOptions().getOption_custom() +"-" + buff.getSeller_customization()  +"-"+ product.getBaseCustomizationOptions().getSector_custom());
         sellerCustomization.save(sellerCustom);
         SellProduct sellProduct = new SellProduct();

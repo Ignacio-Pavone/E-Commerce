@@ -31,7 +31,6 @@ public class Product {
     @JoinColumn(name = "custom_id", referencedColumnName = "id",nullable = true,insertable=false, updatable=false)
     @ManyToOne(targetEntity= com.ecommerce.model.BaseCustomization.class)
     private BaseCustomization baseCustomizationOptions;
-
     @JsonProperty("custom_id")
     @JsonIgnoreProperties("custom_id")
     @JsonBackReference

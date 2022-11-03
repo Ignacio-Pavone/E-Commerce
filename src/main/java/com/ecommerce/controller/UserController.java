@@ -8,6 +8,7 @@ import com.ecommerce.model.dto.ShowUserDTO;
 import com.ecommerce.model.dto.UserDTO;
 import com.ecommerce.model.dto.UserRegisterDTO;
 import com.ecommerce.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @ApiOperation(value = "Get User by id")
     @GetMapping("{id}")
     public ResponseEntity<ShowUserDTO> findById(@PathVariable Long id) {
         try {
@@ -34,6 +36,7 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Get all Users")
     @GetMapping()
     public ResponseEntity<List<ShowUserDTO>> getAll(@RequestParam(value = "name", required = false) String name) throws Error {
         if (name == null || userService.findByNameShowUserList(name).isEmpty()) {
@@ -42,7 +45,7 @@ public class UserController {
             return new ResponseEntity<>(userService.findByNameShowUserList(name), HttpStatus.OK);
         }
     }
-
+    @ApiOperation(value = "Update User")
     @PutMapping("{id}")
     public ResponseEntity<ShowUserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO user) {
         try {
@@ -51,17 +54,18 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserRegisterDTO user) {
-        try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
-        } catch (Error e) {
+    @ApiOperation(value = "Add new User")
+    @PostMapping("/")
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserRegisterDTO user) throws Error {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        UserDTO register = userService.save(user);
+        if (register != null) {
+            return new ResponseEntity<>(register,HttpStatus.CREATED);
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @ApiOperation(value = "Delete User")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         if (userService.deleteUser(id)) {
@@ -70,8 +74,8 @@ public class UserController {
             return new ResponseEntity<>("User NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
-
-    @PatchMapping("/setrole/{id}")
+    @ApiOperation(value = "Add Role to User")
+    @PatchMapping("/{id}/role")
     public ResponseEntity<UserDTO> setRole(@PathVariable("id") Long id, @RequestBody UserDTO user) throws Error {
         if (userService.setRole(id, user.getRole_id()) != null) {
             return new ResponseEntity<>(userService.setRole(id, user.getRole_id()), HttpStatus.OK);
@@ -79,8 +83,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @ApiOperation(value = "Create new Role")
     @PostMapping("/role")
-    public ResponseEntity<String> addRole(@RequestBody String rol) throws Error {
+    public ResponseEntity<String> addRole(@RequestBody String rol) {
         RoleConverter roleConverter = new RoleConverter();
         if (userService.addRole(roleConverter.convertToEntityAttribute(rol))) {
             return new ResponseEntity<>("Role ADDED", HttpStatus.OK);
@@ -88,9 +93,9 @@ public class UserController {
             return new ResponseEntity<>("Role is present or not correct", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @ApiOperation(value = "Get all Roles")
     @GetMapping("/role")
-    public ResponseEntity<List<Role>> getRoles() throws Error {
+    public ResponseEntity<List<Role>> getRoles() {
         return new ResponseEntity<>(userService.getRoles(), HttpStatus.OK);
     }
 }

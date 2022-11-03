@@ -59,12 +59,14 @@ public class UserService {
     }
 
     public UserDTO save(UserRegisterDTO user) throws Error {
-        User userOptional = userRepository.findByName(user.getUsername());
-        user.setRole(2L);
-        if (userOptional != null) {
-            throw new Error("User already exists");
+        Optional<User> user1 = userRepository.findByName(user.getUsername());
+        User nuevo = new User();
+        if (user1.isPresent()) {
+            return null;
+        }else{
+            user.setRole(2L);
+            nuevo = userRepository.save(userMapper.DTOtoUser(user));
         }
-        User nuevo = userRepository.save(userMapper.DTOtoUser(user));
         return userMapper.usertoDTO(nuevo);
     }
 
@@ -89,8 +91,11 @@ public class UserService {
     }
 
     public User findByName(String name) {
-        User nuevo = userRepository.findByName(name);
-        return nuevo;
+        Optional<User> nuevo = userRepository.findByName(name);
+        if (nuevo.isPresent()) {
+            return nuevo.get();
+        }
+        return null;
     }
     public boolean addRole(RoleType rol) {
         Role role = new Role();
