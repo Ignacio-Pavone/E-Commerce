@@ -39,13 +39,49 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 //STORES
                 .antMatchers("/stores").permitAll()
-                .antMatchers("/products").permitAll()
-                .antMatchers("/users").permitAll()
-                .antMatchers("/seller").permitAll()
+                .antMatchers(HttpMethod.POST, "/stores/create").hasAuthority("manager")
+                .antMatchers(HttpMethod.POST, "/stores/addpayment").hasAuthority("manager")
+                .antMatchers(HttpMethod.DELETE, "/stores").hasAuthority("manager")
+                .antMatchers(HttpMethod.POST, "/stores/addpublication").hasAuthority("seller")
+                .antMatchers(HttpMethod.GET, "/stores/*").permitAll()
 
-                .antMatchers(  "/shoppingcart").permitAll()
+                //USERS
+                .antMatchers(HttpMethod.GET,"/users/").hasAuthority("manager")
+                .antMatchers(HttpMethod.DELETE,"/users/").hasAuthority("manager")
+                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
+                .antMatchers(HttpMethod.PUT, "/users/").hasAuthority("manager")
 
-                //.anyRequest().authenticated()
+                //SWAGGER
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**").permitAll()
+                .antMatchers("/users/setrole/**").hasAuthority("manager")
+
+                //SELLER
+                .antMatchers(HttpMethod.GET, "/seller").hasAuthority("seller")
+                .antMatchers(HttpMethod.POST, "/seller").hasAuthority("manager")
+                .antMatchers(HttpMethod.POST, "/seller/chooseproduct").hasAuthority("seller")
+                .antMatchers(HttpMethod.PUT, "/seller").hasAuthority("seller")
+                .antMatchers(HttpMethod.DELETE, "/seller").hasAuthority("manager")
+
+                //PRODUCTS
+                .antMatchers(HttpMethod.GET, "/products").hasAuthority("seller")
+                .antMatchers(HttpMethod.POST, "/products").hasAuthority("manager")
+                .antMatchers(HttpMethod.DELETE, "/products").hasAuthority("manager")
+                .antMatchers(HttpMethod.GET, "/products/allsell").hasAuthority("manager")
+                .antMatchers(HttpMethod.PATCH, "/products/setBaseCustomization").hasAuthority("manager")
+
+                //BASE CUSTOMIZATION
+                .antMatchers(HttpMethod.POST, "/customizations/base").hasAuthority("manager")
+                .antMatchers(HttpMethod.GET, "/customizations/base").hasAuthority("manager")
+                .antMatchers(HttpMethod.DELETE, "/customizations/base").hasAuthority("manager")
+
+                //SHOPPING CART
+                .antMatchers(HttpMethod.POST, "/shoppingcart").hasAuthority("buyer")
+                .antMatchers(HttpMethod.GET, "/shoppingcart").hasAuthority("buyer")
+                .antMatchers(HttpMethod.DELETE, "/shoppingcart").hasAuthority("buyer")
+                .antMatchers(HttpMethod.PATCH, "/shoppingcart/addproduct").hasAuthority("buyer")
+
+                .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
